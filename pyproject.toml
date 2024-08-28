@@ -1,0 +1,26 @@
+[project]
+name = "liteyuki-autodoc"
+version = "0.1.0"
+description = "Default template for PDM package"
+authors = [
+    {name = "snowykami", email = "snowykami@outlook.com"},
+]
+dependencies = [
+    "pydantic>=2.8.2",
+]
+requires-python = ">=3.11"
+readme = "README.md"
+license = {text = "MIT"}
+
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
+
+
+[tool.pdm]
+distribution = true
+
+[tool.pdm.dev-dependencies]
+dev = [
+    "pytest>=8.3.2",
+]
