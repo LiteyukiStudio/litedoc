@@ -24,4 +24,4 @@ def format_date_number() -> str:
 
 
 def get_version() -> str:
-    return f"0.1.0.{format_date_number()}"
+    return f"0.1.0+dev{format_date_number()}"
