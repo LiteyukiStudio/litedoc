@@ -10,12 +10,12 @@ Copyright (C) 2020-2024 LiteyukiStudio. All Rights Reserved
 """
 from typing import Optional
 
-from liteyuki_autodoc.syntax.astparser import AstParser
-from liteyuki_autodoc.syntax.node import *
-from liteyuki_autodoc.i18n import get_text
+from litedoc.syntax.astparser import AstParser
+from litedoc.syntax.node import *
+from litedoc.i18n import get_text
 
 
-def generate(parser: AstParser, lang: str, frontmatter: Optional[dict] = None) -> str:
+def generate(parser: AstParser, lang: str, frontmatter: Optional[dict] = None, style: str = "google") -> str:
     """
     Generate markdown style document from ast
     You can modify this function to generate markdown style that enjoys you
@@ -23,6 +23,7 @@ def generate(parser: AstParser, lang: str, frontmatter: Optional[dict] = None) -
         parser:
         lang: language
         frontmatter:
+        style: style of docs
     Returns:
         markdown style document
     """
@@ -36,24 +37,24 @@ def generate(parser: AstParser, lang: str, frontmatter: Optional[dict] = None) -
 
     # var > func > class
 
+    """遍历函数"""
     for func in parser.functions:
+        if func.name.startswith("_"):
+            continue
         md += func.markdown(lang)
 
+    """遍历类"""
+
     for cls in parser.classes:
-        md += f"### ***class*** `{cls.name}`\n\n"
-        for mtd in cls.methods:
-            md += mtd.markdown(lang, 2, True)
+        md += cls.markdown(lang)
 
-        for attr in cls.attrs:
-            if attr.type == TypeHint.NO_TYPEHINT:
-                md += f"#### ***attr*** `{attr.name} = {attr.value}`\n\n"
-            else:
-                md += f"#### ***attr*** `{attr.name}: {attr.type} = {attr.value}`\n\n"
-
+    """遍历变量"""
     for var in parser.variables:
-        if var.type == TypeHint.NO_TYPEHINT:
-            md += f"### ***var*** `{var.name} = {var.value}`\n\n"
-        else:
-            md += f"### ***var*** `{var.name}: {var.type} = {var.value}`\n\n"
+        md += f"### ***var*** `{var.name} = {var.value}`\n\n"
+        if var.type != TypeHint.NO_TYPEHINT:
+            md += f"- **{get_text(lang, 'type')}**: `{var.type}`\n\n"
+
+        if var.docs is not None:
+            md += f"- **{get_text(lang, 'desc')}**: {var.docs}\n\n"
 
     return md

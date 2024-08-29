@@ -10,8 +10,8 @@ Copyright (C) 2020-2024 LiteyukiStudio. All Rights Reserved
 """
 import os.path
 
-from liteyuki_autodoc.style.markdown import generate
-from liteyuki_autodoc.syntax.astparser import AstParser
+from litedoc.style.markdown import generate
+from litedoc.syntax.astparser import AstParser
 
 
 def write_to_file(content: str, output: str) -> None:
@@ -48,7 +48,14 @@ def get_relative_path(base_path: str, target_path: str) -> str:
     return os.path.relpath(target_path, base_path)
 
 
-def generate_from_module(module_folder: str, output_dir: str, with_top: bool = False, lang: str = "zh-Hans", ignored_paths=None):
+def generate_from_module(module_folder: str,
+                         output_dir: str,
+                         with_top: bool = False,
+                         lang: str = "zh-Hans",
+                         ignored_paths=None,
+                         theme: str = "vitepress",
+                         style: str = "google"
+                         ):
     """
     生成文档
     Args:
@@ -57,6 +64,8 @@ def generate_from_module(module_folder: str, output_dir: str, with_top: bool = F
         with_top: 是否包含顶层文件夹 False时例如docs/api/module_a, docs/api/module_b， True时例如docs/api/module/module_a.md， docs/api/module/module_b.md
         ignored_paths: 忽略的路径
         lang: 语言
+        theme: 主题
+        style: 样式
     """
     if ignored_paths is None:
         ignored_paths = []
@@ -69,7 +78,7 @@ def generate_from_module(module_folder: str, output_dir: str, with_top: bool = F
         os.makedirs(output_dir)
 
     replace_data = {
-            "__init__": "index",
+            "__init__": "index" if theme == "vitepress" else "README",
             ".py"     : ".md",
     }
 
@@ -92,7 +101,7 @@ def generate_from_module(module_folder: str, output_dir: str, with_top: bool = F
         # 生成markdown
 
         front_matter = {
-                "title"   : pyfile_path.replace("\\", "/").
+                "title": pyfile_path.replace("\\", "/").
                 replace("/", ".").
                 replace(".py", "").
                 replace(".__init__", ""),

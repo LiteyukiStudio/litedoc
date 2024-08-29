@@ -3,7 +3,7 @@ Google docstring parser for Python.
 """
 from typing import Optional
 
-from liteyuki_autodoc.docstring.docstring import Docstring
+from litedoc.docstring.docstring import Docstring
 
 
 class Parser:
@@ -52,10 +52,30 @@ class GoogleDocstringParser(Parser):
 
         self.docstring = Docstring()
 
+    def read_line(self, move: bool = True) -> str:
+        """
+        每次读取一行
+        Args:
+            move: 是否移动指针
+        Returns:
+        """
+        if self.lineno >= len(self.lines):
+            return ""
+        line = self.lines[self.lineno]
+        if move:
+            self.lineno += 1
+        return line
+
     def match_token(self) -> Optional[str]:
+        """
+        解析下一行的token
+        Returns:
+
+        """
         for token in self._tokens:
-            if self.lines[self.lineno][self.char:].startswith(token):
-                self.char += len(token)
+            line = self.read_line(move=False)
+            if line.strip().startswith(token):
+                self.lineno += 1
                 return self._tokens[token]
         return None
 
@@ -115,17 +135,12 @@ class GoogleDocstringParser(Parser):
         在一个子解析器中，解析下一行，直到缩进小于等于当前行的缩进
         Returns:
         """
-        while (self.lineno + 1) < len(self.lines):
-            line = self.lines[self.lineno + 1]
-            if line.startswith(" " * self.indent):
-                line = line[self.indent:]
-                self.lineno += 1
-                return line
-            else:
-                self.lineno += 1
-                return None
-        self.lineno += 1
-        return None
+        line = self.read_line(move=False)
+        if line.startswith(" " * self.indent):
+            self.lineno += 1
+            return line[self.indent:]
+        else:
+            return None
 
     def parse(self) -> Docstring:
         """

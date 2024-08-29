@@ -13,8 +13,8 @@ from enum import Enum
 
 from pydantic import BaseModel, Field
 
-from liteyuki_autodoc.docstring.docstring import Docstring
-from liteyuki_autodoc.i18n import get_text
+from litedoc.docstring.docstring import Docstring
+from litedoc.i18n import get_text
 
 
 class TypeHint:
@@ -37,6 +37,7 @@ class AssignNode(BaseModel):
     name: str
     type: str = ""
     value: str
+    docs: Optional[str] = ""
 
 
 class ArgNode(BaseModel):
@@ -123,6 +124,22 @@ class FunctionNode(BaseModel):
     decorators: list[str] = []
     src: str
     is_async: bool = False
+    is_classmethod: bool = False
+
+    magic_methods: dict[str, str] = {
+            "__add__"    : "+",
+            "__radd__"   : "+",
+            "__sub__"    : "-",
+            "__rsub__"   : "-",
+            "__mul__"    : "*",
+            "__rmul__"   : "*",
+            "__matmul__" : "@",
+            "__rmatmul__": "@",
+            "__mod__"    : "%",
+            "__truediv__": "/",
+            "__rtruediv__": "/",
+            "__neg__"    : "-",
+    }  # 魔术方法, 例如运算符
 
     def is_private(self):
         """
@@ -140,12 +157,11 @@ class FunctionNode(BaseModel):
         """
         return self.name.startswith("__") and self.name.endswith("__")
 
-    def markdown(self, lang: str, indent: int = 0, is_classmethod: bool = False) -> str:
+    def markdown(self, lang: str, indent: int = 0) -> str:
         """
         Args:
             indent: int
                 The number of spaces to indent the markdown.
-            is_classmethod: bool
             lang: str
                 The language of the
         Returns:
@@ -155,21 +171,20 @@ class FunctionNode(BaseModel):
         PREFIX = "" * indent
         # if is_classmethod:
         #     PREFIX = "- #"
+        func_type = "func" if not self.is_classmethod else "method"
 
         md = ""
-
         # 装饰器部分
         if len(self.decorators) > 0:
             for decorator in self.decorators:
                 md += PREFIX + f"### `@{decorator}`\n"
 
         if self.is_async:
-            md += PREFIX + "### *async def* "
+            md += PREFIX + f"### *async {func_type}* "
         else:
-            md += PREFIX + "### *def* "
+            md += PREFIX + f"### *{func_type}* "
 
-        md += f"`{self.name}("  # code start
-
+        # code start
         # 配对位置参数和位置参数默认值，无默认值用TypeHint.NO_DEFAULT
         args: list[str] = []  # 可直接", ".join(args)得到位置参数部分
         arg_i = 0
@@ -204,25 +219,33 @@ class FunctionNode(BaseModel):
                 arg_text = f"{arg.name}"
                 if arg.type != TypeHint.NO_TYPEHINT:
                     arg_text += f": {arg.type}"
-
                 if kw_default.value != TypeHint.NO_DEFAULT:
                     arg_text += f" = {kw_default.value}"
                 args.append(arg_text)
 
-        md += ", ".join(args) + ")"
-
-        if self.return_ != TypeHint.NO_RETURN:
-            md += f" -> {self.return_}"
+        """魔法方法"""
+        if self.name in self.magic_methods:
+            if len(args) == 2:
+                md += f"`{args[0]} {self.magic_methods[self.name]} {args[1]}"
+            elif len(args) == 1:
+                md += f"`{self.magic_methods[self.name]} {args[0]}"
+            if self.return_ != TypeHint.NO_RETURN:
+                md += f" => {self.return_}"
+        else:
+            md += f"`{self.name}("  # code start
+            md += ", ".join(args) + ")"
+            if self.return_ != TypeHint.NO_RETURN:
+                md += f" -> {self.return_}"
 
         md += "`\n\n"  # code end
 
         """此处预留docstring"""
         if self.docs is not None:
-            md += f"\n{self.docs.markdown(lang, indent, is_classmethod)}\n"
+            md += f"\n{self.docs.markdown(lang, indent)}\n"
         else:
             pass
         # 源码展示
-        md += PREFIX + f"\n<details>\n<summary>{get_text(lang, 'src')}</summary>\n\n```python\n{self.src}\n```\n</details>\n\n"
+        md += PREFIX + f"\n<details>\n<summary> <b>{get_text(lang, 'src')}</b> </summary>\n\n```python\n{self.src}\n```\n</details>\n\n"
 
         return md
 
@@ -251,11 +274,41 @@ class ClassNode(BaseModel):
             The attributes of the class.
         methods: list[MethodNode] = []
             The methods of the class.
-        inherit: list["ClassNode"] = []
+        inherits: list["ClassNode"] = []
             The classes that the class inherits from
     """
     name: str
     docs: Optional[Docstring] = None
     attrs: list[AttrNode] = []
     methods: list[FunctionNode] = []
-    inherit: list["ClassNode"] = []
+    inherits: list[str] = []
+
+    def markdown(self, lang: str) -> str:
+        """
+        返回类的markdown文档
+        Args:
+            lang: str
+                The language of the
+        Returns:
+            markdown style document
+        """
+        hidden_methods = [
+                "__str__",
+                "__repr__",
+        ]
+        md = ""
+        md += f"### **class** `{self.name}"
+        if len(self.inherits) > 0:
+            md += f"({', '.join([cls for cls in self.inherits])})"
+        md += "`\n"
+        for method in self.methods:
+            if method.name in hidden_methods:
+                continue
+            md += method.markdown(lang, 2)
+        for attr in self.attrs:
+            if attr.type == TypeHint.NO_TYPEHINT:
+                md += f"#### ***attr*** `{attr.name} = {attr.value}`\n\n"
+            else:
+                md += f"#### ***attr*** `{attr.name}: {attr.type} = {attr.value}`\n\n"
+
+        return md

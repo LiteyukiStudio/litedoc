@@ -9,7 +9,7 @@ NestedDict: TypeAlias = dict[str, 'str | NestedDict']
 i18n_dict: dict[str, NestedDict] = {
         "en"     : {
                 "docstring": {
-                        "args"     : "Args",
+                        "args"     : "Arguments",
                         "return"   : "Return",
                         "attribute": "Attribute",
                         "raises"   : "Raises",
@@ -17,6 +17,8 @@ i18n_dict: dict[str, NestedDict] = {
                         "yields"   : "Yields",
                 },
                 "src": "Source code",
+                "desc": "Description",
+                "type": "Type",
         },
         "zh-Hans": {
                 "docstring": {
@@ -27,18 +29,22 @@ i18n_dict: dict[str, NestedDict] = {
                         "example"  : "示例",
                         "yields"   : "产出",
                 },
-                "src": "源码",
+                "src": "源代码",
+                "desc": "说明",
+                "type": "类型",
         },
         "zh-Hant": {
                 "docstring": {
-                        "args"     : "參數",
+                        "args"     : "變數説明",
                         "return"   : "返回",
                         "attribute": "屬性",
-                        "raises"   : "引發",
-                        "example"  : "示例",
+                        "raises"   : "抛出",
+                        "example"  : "範例",
                         "yields"   : "產出",
                 },
                 "src": "源碼",
+                "desc": "説明",
+                "type": "類型",
         },
         "ja"     : {
                 "docstring": {
@@ -50,6 +56,8 @@ i18n_dict: dict[str, NestedDict] = {
                         "yields"   : "生成",
                 },
                 "src": "ソースコード",
+                "desc": "説明",
+                "type": "タイプ",
         },
 }
 
