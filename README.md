@@ -1,8 +1,11 @@
-# liteyuki-autodoc
+# Litedoc
 
-## 为你的Python库模块生成清晰的markdown文档
+### 为你的Python库模块生成结构化的markdown文档
 
-### 功能：i18n支持，多风格注释支持，多主题支持
+功能：
+- i18n多语言支持
+- 可选注释风格
+- 可选主题支持
 
 ## 安装
 
