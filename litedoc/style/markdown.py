@@ -14,6 +14,7 @@ from litedoc.syntax.astparser import AstParser
 from litedoc.syntax.node import *
 from litedoc.i18n import get_text
 
+litedoc_hide = "@litedoc-hide"
 
 def generate(parser: AstParser, lang: str, frontmatter: Optional[dict] = None, style: str = "google") -> str:
     """
@@ -40,7 +41,9 @@ def generate(parser: AstParser, lang: str, frontmatter: Optional[dict] = None, s
     """遍历函数"""
     for func in parser.functions:
         # 仅给有注释的函数生成文档
-        if func.name.startswith("_") or func.docs is None:
+        if func.name.startswith("_"):
+            continue
+        if func.docs is not None and litedoc_hide in func.docs.reduction():
             continue
         md += func.markdown(lang)
 
@@ -52,7 +55,7 @@ def generate(parser: AstParser, lang: str, frontmatter: Optional[dict] = None, s
     """遍历变量"""
     for var in parser.variables:
         # 仅给有注释的变量生成文档
-        if var.docs is not None:
+        if var.docs is not None and litedoc_hide not in var.docs:
             md += f"### ***var*** `{var.name} = {var.value}`\n\n"
             if var.type != TypeHint.NO_TYPEHINT:
                 md += f"- **{get_text(lang, 'type')}**: `{var.type}`\n\n"

@@ -75,38 +75,38 @@ class Docstring(BaseModel):
     def add_example(self, desc: str = "", input_: str = "", output: str = ""):
         self.example.append(Example(desc=desc, input=input_, output=output))
 
-    def reduction(self) -> str:
+    def reduction(self, style: str = "google") -> str:
         """
         通过解析结果还原docstring
         Args:
-
+            style: docstring风格
         Returns:
 
         """
         ret = ""
-        ret += self.desc + "\n"
-        if self.args:
-            ret += "Args:\n"
-            for arg in self.args:
-                ret += f"    {arg.name}: {arg.type}\n        {arg.desc}\n"
-        if self.attrs:
-            ret += "Attributes:\n"
-            for attr in self.attrs:
-                ret += f"    {attr.name}: {attr.type}\n        {attr.desc}\n"
-        if self.return_:
-            ret += "Returns:\n"
-            ret += f"    {self.return_.desc}\n"
+        if style == "google":
+            ret += self.desc + "\n"
+            if self.args:
+                ret += "Args:\n"
+                for arg in self.args:
+                    ret += f"    {arg.name}: {arg.type}\n        {arg.desc}\n"
+            if self.attrs:
+                ret += "Attributes:\n"
+                for attr in self.attrs:
+                    ret += f"    {attr.name}: {attr.type}\n        {attr.desc}\n"
+            if self.return_:
+                ret += "Returns:\n"
+                ret += f"    {self.return_.desc}\n"
 
-        if self.raise_:
-            ret += "Raises:\n"
-            for exception in self.raise_:
-                ret += f"    {exception.name}\n        {exception.desc}\n"
+            if self.raise_:
+                ret += "Raises:\n"
+                for exception in self.raise_:
+                    ret += f"    {exception.name}\n        {exception.desc}\n"
 
-        if self.example:
-            ret += "Examples:\n"
-            for example in self.example:
-                ret += f"    {example.desc}\n        Input: {example.input}\n        Output: {example.output}\n"
-
+            if self.example:
+                ret += "Examples:\n"
+                for example in self.example:
+                    ret += f"    {example.desc}\n        Input: {example.input}\n        Output: {example.output}\n"
         return ret
 
     def markdown(self, lang: str, indent: int = 4, is_classmethod: bool = False) -> str:

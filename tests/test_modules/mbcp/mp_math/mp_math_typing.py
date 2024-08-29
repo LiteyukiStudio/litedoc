@@ -10,7 +10,7 @@ Copyright (C) 2020-2024 LiteyukiStudio. All Rights Reserved
 """
 from typing import Callable, Iterable, TypeAlias, TypeVar
 
-RealNumber: TypeAlias = int | float  # 实数
+RealNumber: TypeAlias = int | float  # 实数@litedoc-hide
 Number: TypeAlias = RealNumber | complex  # 数
 SingleVar = TypeVar("SingleVar", bound=Number)  # 单变量
 ArrayVar = TypeVar("ArrayVar", bound=Iterable[Number])  # 数组变量

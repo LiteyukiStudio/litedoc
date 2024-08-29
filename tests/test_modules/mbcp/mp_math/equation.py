@@ -59,6 +59,10 @@ def get_partial_derivative_func(func: MultiVarsFunc, var: int | tuple[int, ...],
     """
     if isinstance(var, int):
         def partial_derivative_func(*args: Var) -> Var:
+            """
+            :param args:
+            :return:
+            """
             args_list_plus = list(args)
             args_list_plus[var] += epsilon
             args_list_minus = list(args)
@@ -67,6 +71,11 @@ def get_partial_derivative_func(func: MultiVarsFunc, var: int | tuple[int, ...],
         return partial_derivative_func
     elif isinstance(var, tuple):
         def high_order_partial_derivative_func(*args: Var) -> Var:
+            """
+            求高阶偏导函数 @litedoc-hide
+            :param args:
+            :return:
+            """
             result_func = func
             for v in var:
                 result_func = get_partial_derivative_func(result_func, v, epsilon)
