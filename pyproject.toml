@@ -1,5 +1,5 @@
 [project]
-name = "liteyuki-autodoc"
+name = "litedoc"
 dynamic = ["version"]
 description = "Default template for PDM package"
 authors = [
