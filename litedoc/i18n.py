@@ -6,7 +6,8 @@ from typing import Optional, TypeAlias
 
 NestedDict: TypeAlias = dict[str, 'str | NestedDict']
 
-i18n_dict: dict[str, NestedDict] = {
+"""@litedoc-hide"""
+i18n_dict: dict[str, NestedDict] = {  # @litedoc-hide
         "en"     : {
                 "docstring": {
                         "args"     : "Arguments",
@@ -16,9 +17,9 @@ i18n_dict: dict[str, NestedDict] = {
                         "example"  : "Examples",
                         "yields"   : "Yields",
                 },
-                "src": "Source code",
-                "desc": "Description",
-                "type": "Type",
+                "src"      : "Source code",
+                "desc"     : "Description",
+                "type"     : "Type",
         },
         "zh-Hans": {
                 "docstring": {
@@ -29,9 +30,9 @@ i18n_dict: dict[str, NestedDict] = {
                         "example"  : "示例",
                         "yields"   : "产出",
                 },
-                "src": "源代码",
-                "desc": "说明",
-                "type": "类型",
+                "src"      : "源代码",
+                "desc"     : "说明",
+                "type"     : "类型",
         },
         "zh-Hant": {
                 "docstring": {
@@ -42,9 +43,9 @@ i18n_dict: dict[str, NestedDict] = {
                         "example"  : "範例",
                         "yields"   : "產出",
                 },
-                "src": "源碼",
-                "desc": "説明",
-                "type": "類型",
+                "src"      : "源碼",
+                "desc"     : "説明",
+                "type"     : "類型",
         },
         "ja"     : {
                 "docstring": {
@@ -55,40 +56,20 @@ i18n_dict: dict[str, NestedDict] = {
                         "example"  : "例",
                         "yields"   : "生成",
                 },
-                "src": "ソースコード",
-                "desc": "説明",
-                "type": "タイプ",
+                "src"      : "ソースコード",
+                "desc"     : "説明",
+                "type"     : "タイプ",
         },
-}
-"""@litedoc-hide"""
+}  # @litedoc-hide
 
 
 def flat_i18n_dict(data: dict[str, NestedDict]) -> dict[str, dict[str, str]]:
     """
     Flatten i18n_dict.
-    Examples:
-        ```python
-        {
-            "en": {
-                "docs": {
-                    "key1": "val1",
-                    "key2": "val2",
-                }
-            }
-        }
-        ```
-
-        to
-
-        ```python
-        {
-            "en": {
-                "docs.key1": "val1",
-                "docs.key2": "val2",
-            }
-        }
-        ```
+    Args:
+        data: i18n_dict
     Returns:
+        dict: flatten dict
     """
     ret: dict[str, dict[str, str]] = {}
 

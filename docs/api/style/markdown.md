@@ -53,6 +53,7 @@ def generate(parser: AstParser, lang: str, frontmatter: Optional[dict]=None, sty
     '遍历变量'
     for var in parser.variables:
         if var.docs is not None and litedoc_hide not in var.docs:
+            print(var.docs)
             md += f'### ***var*** `{var.name} = {var.value}`\n\n'
             if var.type != TypeHint.NO_TYPEHINT:
                 md += f"- **{get_text(lang, 'type')}**: `{var.type}`\n\n"
