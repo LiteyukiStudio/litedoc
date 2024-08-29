@@ -39,7 +39,8 @@ def generate(parser: AstParser, lang: str, frontmatter: Optional[dict] = None, s
 
     """遍历函数"""
     for func in parser.functions:
-        if func.name.startswith("_"):
+        # 仅给有注释的函数生成文档
+        if func.name.startswith("_") or func.docs is None:
             continue
         md += func.markdown(lang)
 
