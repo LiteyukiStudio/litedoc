@@ -60,6 +60,7 @@ i18n_dict: dict[str, NestedDict] = {
                 "type": "タイプ",
         },
 }
+"""@litedoc-hide"""
 
 
 def flat_i18n_dict(data: dict[str, NestedDict]) -> dict[str, dict[str, str]]:
