@@ -116,7 +116,9 @@ class FunctionNode(BaseModel):
 
     posonlyargs: list[ArgNode] = []
     args: list[ArgNode] = []
+    vararg: Optional[ArgNode] = None
     kwonlyargs: list[ArgNode] = []
+    kwarg: Optional[ArgNode] = None
     kw_defaults: list[ConstantNode] = []
     defaults: list[ConstantNode] = []
 
@@ -212,6 +214,12 @@ class FunctionNode(BaseModel):
             args.append(arg_text)
             arg_i += 1
 
+        if arg := self.vararg:
+            arg_text = f"*{arg.name}"
+            if arg.type != TypeHint.NO_TYPEHINT:
+                arg_text += f": {arg.type}"
+            args.append(arg_text)
+
         if len(self.kwonlyargs) > 0:
             # 加关键字参数分割符 *
             args.append("*")
@@ -222,6 +230,12 @@ class FunctionNode(BaseModel):
                 if kw_default.value != TypeHint.NO_DEFAULT:
                     arg_text += f" = {kw_default.value}"
                 args.append(arg_text)
+
+        if self.kwarg is not None:
+            arg_text = f"**{self.kwarg.name}"
+            if self.kwarg.type != TypeHint.NO_TYPEHINT:
+                arg_text += f": {self.kwarg.type}"
+            args.append(arg_text)
 
         """魔法方法"""
         if self.name in self.magic_methods:

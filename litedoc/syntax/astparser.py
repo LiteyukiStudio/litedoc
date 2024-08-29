@@ -14,6 +14,7 @@ import inspect
 from .node import *
 from ..docstring.parser import parse
 
+
 class AstParser:
     def __init__(self, code: str, style: str = "google"):
         """
@@ -110,6 +111,11 @@ class AstParser:
                                     )
                                     for arg in sub_node.args.args
                             ],
+                            vararg=ArgNode(
+                                name=sub_node.args.vararg.arg,
+                                type=self.clear_quotes(
+                                    ast.unparse(sub_node.args.vararg.annotation).strip()) if sub_node.args.vararg.annotation else TypeHint.NO_TYPEHINT
+                            ) if sub_node.args.vararg else None,
                             kwonlyargs=[
                                     ArgNode(
                                         name=arg.arg,
@@ -117,6 +123,11 @@ class AstParser:
                                     )
                                     for arg in sub_node.args.kwonlyargs
                             ],
+                            kwarg=ArgNode(
+                                name=sub_node.args.kwarg.arg,
+                                type=self.clear_quotes(
+                                    ast.unparse(sub_node.args.kwarg.annotation).strip()) if sub_node.args.kwarg.annotation else TypeHint.NO_TYPEHINT
+                            ) if sub_node.args.kwarg else None,
                             kw_defaults=[
                                     ConstantNode(
                                         value=ast.unparse(default).strip() if default else TypeHint.NO_DEFAULT
@@ -155,7 +166,6 @@ class AstParser:
                 # 仅打印模块级别的函数
                 if not self._is_module_level_function(node):
                     continue
-
                 self.functions.append(FunctionNode(
                     name=node.name,
                     docs=parse(ast.get_docstring(node), parser=self.style) if ast.get_docstring(node) else None,
@@ -173,6 +183,10 @@ class AstParser:
                             )
                             for arg, default in zip(node.args.args, node.args.defaults)
                     ],
+                    vararg=ArgNode(
+                        name=node.args.vararg.arg,
+                        type=self.clear_quotes(ast.unparse(node.args.vararg.annotation).strip()) if node.args.vararg.annotation else TypeHint.NO_TYPEHINT
+                    ) if node.args.vararg else None,
                     kwonlyargs=[
                             ArgNode(
                                 name=arg.arg,
@@ -180,6 +194,10 @@ class AstParser:
                             )
                             for arg in node.args.kwonlyargs
                     ],
+                    kwarg=ArgNode(
+                        name=node.args.kwarg.arg,
+                        type=self.clear_quotes(ast.unparse(node.args.kwarg.annotation).strip()) if node.args.kwarg.annotation else TypeHint.NO_TYPEHINT
+                    ) if node.args.kwarg else None,
                     kw_defaults=[
                             ConstantNode(
                                 value=ast.unparse(default).strip() if default else TypeHint.NO_DEFAULT

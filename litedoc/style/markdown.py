@@ -16,6 +16,7 @@ from litedoc.i18n import get_text
 
 litedoc_hide = "@litedoc-hide"
 
+
 def generate(parser: AstParser, lang: str, frontmatter: Optional[dict] = None, style: str = "google") -> str:
     """
     Generate markdown style document from ast
