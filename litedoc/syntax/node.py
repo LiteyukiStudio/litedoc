@@ -180,9 +180,9 @@ class FunctionNode(BaseModel):
                 md += PREFIX + f"### `@{decorator}`\n"
 
         if self.is_async:
-            md += PREFIX + f"### *async {func_type}* "
+            md += PREFIX + f"### ***async {func_type}*** "
         else:
-            md += PREFIX + f"### *{func_type}* "
+            md += PREFIX + f"### ***{func_type}*** "
 
         # code start
         # 配对位置参数和位置参数默认值，无默认值用TypeHint.NO_DEFAULT
