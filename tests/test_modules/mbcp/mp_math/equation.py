@@ -18,9 +18,10 @@ class CurveEquation:
     def __init__(self, x_func: OneVarFunc, y_func: OneVarFunc, z_func: OneVarFunc):
         """
         曲线方程。
-        :param x_func:
-        :param y_func:
-        :param z_func:
+        Args:
+            x_func: x函数
+            y_func: y函数
+            z_func: z函数
         """
         self.x_func = x_func
         self.y_func = y_func
@@ -31,7 +32,7 @@ class CurveEquation:
         计算曲线上的点。
         Args:
             *t:
-
+                参数
         Returns:
 
         """

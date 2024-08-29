@@ -15,7 +15,11 @@ from .const import PI  # type: ignore
 from .utils import approx
 
 
-class AnyAngle:
+class Angle:
+    ...
+
+
+class AnyAngle(Angle):
     def __init__(self, value: float, is_radian: bool = False):
         """
         任意角度。

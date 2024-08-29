@@ -22,23 +22,21 @@ class Plane3:
         """
         平面方程：ax + by + cz + d = 0
         Args:
-            a:
-            b:
-            c:
-            d:
+            a: x系数
+            b: y系数
+            c: z系数
+            d: 常数项
         """
         self.a = a
         self.b = b
         self.c = c
         self.d = d
 
-    def approx(self, other: 'Plane3', epsilon: float = APPROX) -> bool:
+    def approx(self, other: 'Plane3') -> bool:
         """
         判断两个平面是否近似相等。
         Args:
-            other:
-            epsilon:
-
+            other: 另一个平面
         Returns:
             是否近似相等
         """
@@ -90,11 +88,11 @@ class Plane3:
 
     def cal_intersection_line3(self, other: 'Plane3') -> 'Line3':
         """
-        计算两平面的交线。该方法有问题，待修复。
+        计算两平面的交线。
         Args:
             other: 另一个平面
         Returns:
-            交线
+            两平面的交线
         Raises:
         """
         if self.normal.is_parallel(other.normal):
@@ -104,6 +102,7 @@ class Plane3:
         x, y, z = 0, 0, 0
         # 依次判断条件假设x=0, y=0, z=0，找到合适的点
         # 先假设其中一个系数不为0，则令此坐标为0，构建增广矩阵，解出另外两个坐标
+
         if self.a != 0 and other.a != 0:
             A = np.array([[self.b, self.c], [other.b, other.c]])
             B = np.array([-self.d, -other.d])
@@ -145,7 +144,7 @@ class Plane3:
         Args:
             point: 指定点
         Returns:
-            平面
+            所求平面
         """
         return Plane3.from_point_and_normal(point, self.normal)
 

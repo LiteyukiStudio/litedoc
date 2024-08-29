@@ -50,11 +50,11 @@ def generate(parser: AstParser, lang: str, frontmatter: Optional[dict] = None, s
 
     """遍历变量"""
     for var in parser.variables:
-        md += f"### ***var*** `{var.name} = {var.value}`\n\n"
-        if var.type != TypeHint.NO_TYPEHINT:
-            md += f"- **{get_text(lang, 'type')}**: `{var.type}`\n\n"
-
+        # 仅给有注释的变量生成文档
         if var.docs is not None:
+            md += f"### ***var*** `{var.name} = {var.value}`\n\n"
+            if var.type != TypeHint.NO_TYPEHINT:
+                md += f"- **{get_text(lang, 'type')}**: `{var.type}`\n\n"
             md += f"- **{get_text(lang, 'desc')}**: {var.docs}\n\n"
 
     return md

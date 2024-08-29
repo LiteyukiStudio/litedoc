@@ -220,14 +220,15 @@ class AstParser:
                     else:
                         docs = None
 
-                # if isinstance(node, ast.Assign):
-                #     for target in node.targets:
-                #         if isinstance(target, ast.Name):
-                #             self.variables.append(AssignNode(
-                #                 name=target.id,
-                #                 value=ast.unparse(node.value).strip(),
-                #                 type=ast.unparse(node.annotation).strip() if isinstance(node, ast.AnnAssign) else TypeHint.NO_TYPEHINT
-                #             ))
+                if isinstance(node, ast.Assign):
+                    for target in node.targets:
+                        if isinstance(target, ast.Name):
+                            self.variables.append(AssignNode(
+                                name=target.id,
+                                value=ast.unparse(node.value).strip(),
+                                type=ast.unparse(node.annotation).strip() if isinstance(node, ast.AnnAssign) else TypeHint.NO_TYPEHINT,
+                                docs=docs
+                            ))
                 if isinstance(node, ast.AnnAssign):
                     self.variables.append(AssignNode(
                         name=node.target.id,

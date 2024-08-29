@@ -263,11 +263,11 @@ class Vector3:
         return f"Vector3({self.x}, {self.y}, {self.z})"
 
 
-zero_vector3 = Vector3(0, 0, 0)
+zero_vector3: Vector3 = Vector3(0, 0, 0)
 """零向量"""
-x_axis = Vector3(1, 0, 0)
+x_axis: Vector3 = Vector3(1, 0, 0)
 """x轴单位向量"""
-y_axis = Vector3(0, 1, 0)
+y_axis: Vector3 = Vector3(0, 1, 0)
 """y轴单位向量"""
-z_axis = Vector3(0, 0, 1)
+z_axis: Vector3 = Vector3(0, 0, 1)
 """z轴单位向量"""

@@ -22,11 +22,11 @@ if TYPE_CHECKING:
 
 def clamp(x: float, min_: float, max_: float) -> float:
     """
-    区间截断函数。
+    区间限定函数
     Args:
-        x:
-        min_:
-        max_:
+        x: 待限定的值
+        min_: 最小值
+        max_: 最大值
 
     Returns:
         限制后的值
@@ -40,7 +40,6 @@ class Approx:
 
     已实现对象 实数 Vector3 Point3 Plane3 Line3
     """
-
     def __init__(self, value: RealNumber):
         self.value = value
 
@@ -67,10 +66,9 @@ def approx(x: float, y: float = 0.0, epsilon: float = APPROX) -> bool:
     """
     判断两个数是否近似相等。或包装一个实数，用于判断是否近似于0。
     Args:
-        x:
-        y:
-        epsilon:
-
+        x: 数1
+        y: 数2
+        epsilon: 误差
     Returns:
         是否近似相等
     """
