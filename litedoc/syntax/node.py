@@ -200,7 +200,7 @@ class FunctionNode(BaseModel):
         # 装饰器部分
         if len(self.decorators) > 0:
             for decorator in self.decorators:
-                md += PREFIX + f"{h} `@{decorator}`\n"
+                md += PREFIX + f"`@{decorator}`\n"
 
         if self.is_async:
             md += PREFIX + f"{h} ***async {func_type}*** "
