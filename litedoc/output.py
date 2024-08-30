@@ -121,7 +121,7 @@ def generate_from_module(module_folder: str,
 
             md_content = generate(ast_parser, lang=lang, frontmatter=config_front_matter, **kwargs)
             file_data[abs_md_path] = md_content
-            if kwargs.get("cs", False):
+            if kwargs.get("cs", False) and base_name == "index.md":
                 file_data[create_same_path] = md_content
             print(f"Output {pyfile_path} -> {abs_md_path}")
             generate_file_count += 1
