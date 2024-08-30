@@ -188,7 +188,7 @@ class AstParser:
                                 name=arg.arg,
                                 type=self.clear_quotes(ast.unparse(arg.annotation).strip()) if arg.annotation else TypeHint.NO_TYPEHINT,
                             )
-                            for arg, default in zip(node.args.args, node.args.defaults)
+                            for arg in node.args.args
                     ],
                     vararg=ArgNode(
                         name=node.args.vararg.arg,

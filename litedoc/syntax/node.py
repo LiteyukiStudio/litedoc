@@ -187,6 +187,9 @@ class FunctionNode(BaseModel):
         Returns:
             markdown style document
         """
+        if self.name == "curry":
+            print("curry")
+            print(self.args, self.vararg)
         self.complete_default_args()
         PREFIX = "" * indent
         # if is_classmethod:
