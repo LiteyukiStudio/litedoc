@@ -32,6 +32,9 @@ def main():
     parser.add_argument("-f", "--frontmatter", default=None, type=str, help="Frontmatter of the document.")
     parser.add_argument("-fd", "--function_define", default="func", type=str, help="Function define of the document.")
     parser.add_argument("-md", "--method_define", default="method", type=str, help="Class function define of the document.")
+    parser.add_argument("-cd", "--class_define", default="class", type=str, help="Class define of the document.")
+    parser.add_argument("-vd", "--var_define", default="var", type=str, help="Variable define of the document.")
+    parser.add_argument("-ad", "--attr_define", default="attr", type=str, help="Attribute define of the document.")
     # frontmatter 输入格式为 key1=value1,key2=value2, 空格用%20代替
 
     args = parser.parse_args()
@@ -54,7 +57,7 @@ def main():
         frontmatter = None
 
     generate_from_module(args.path, args.output, with_top=args.contain_top, lang=lang, theme=args.theme, style=args.style, frontmatter=frontmatter,
-                         fd=args.function_define, md=args.method_define)
+                         fd=args.function_define, md=args.method_define, cd=args.class_define, vd=args.var_define, ad=args.attr_define)
 
 
 if __name__ == '__main__':

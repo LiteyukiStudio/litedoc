@@ -39,7 +39,7 @@ class AssignNode(BaseModel):
     value: str
     docs: Optional[str] = ""
 
-    def markdown(self, lang: str) -> str:
+    def markdown(self, lang: str, **kwargs) -> str:
         """
         Args:
             lang: str
@@ -47,8 +47,9 @@ class AssignNode(BaseModel):
         Returns:
             markdown style document
         """
+        vd = kwargs.get("vd", "var")
         md = ""
-        md += f"### var `{self.name}` = `{self.value}`\n\n"
+        md += f"### {vd} `{self.name}` = `{self.value}`\n\n"
         if self.type != TypeHint.NO_TYPEHINT:
             md += f"- **{get_text(lang, 'type')}**: `{self.type}`\n\n"
         if self.docs is not None:
@@ -333,7 +334,7 @@ class ClassNode(BaseModel):
                 "__repr__",
         ]
         md = ""
-        md += f"### ***class*** `{self.name}"
+        md += f"### ***{kwargs.get('cd', 'class')}*** `{self.name}"
         if len(self.inherits) > 0:
             md += f"({', '.join([cls for cls in self.inherits])})"
         md += "`\n"
@@ -343,8 +344,8 @@ class ClassNode(BaseModel):
             md += method.markdown(lang, 2, **kwargs)
         for attr in self.attrs:
             if attr.type == TypeHint.NO_TYPEHINT:
-                md += f"#### ***attr*** `{attr.name} = {attr.value}`\n\n"
+                md += f"#### ***{kwargs.get('ad', get_text(lang, 'docstring.attribute'))}*** `{attr.name} = {attr.value}`\n\n"
             else:
-                md += f"#### ***attr*** `{attr.name}: {attr.type} = {attr.value}`\n\n"
+                md += f"#### ***{kwargs.get('ad', get_text(lang, 'docstring.attribute'))}*** `{attr.name}: {attr.type} = {attr.value}`\n\n"
 
         return md

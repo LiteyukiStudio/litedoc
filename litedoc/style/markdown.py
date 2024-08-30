@@ -54,5 +54,5 @@ def generate(parser: AstParser, lang: str, frontmatter: Optional[dict] = None, *
             md += node.markdown(lang, **kwargs)
         elif isinstance(node, AssignNode):
             if node.docs is not None and litedoc_hide not in node.docs:
-                md += node.markdown(lang)
+                md += node.markdown(lang, **kwargs)
     return md

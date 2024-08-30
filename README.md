@@ -30,6 +30,9 @@ python -m litedoc <your_module_path> -o|--output <output_path>
 -f|--frontmatter:  #是否生成frontmatter，即文档的元数据，如title, description等, 格式为key1=value1,key2=value2, 空格用%20代替
 -fd|--function_define: "func" 函数定义风格，输出的markdown显示的函数定义，Python原生为def
 -md|--method_define: "method" 方法定义风格，输出的markdown显示的方法定义
+-cd|--class_define: "class" 类定义风格，输出的markdown显示的类定义
+-vd|--var_define: "var" 变量定义风格，输出的markdown显示的变量定义
+-ad|--attr_define: "attr" 属性定义风格，输出的markdown显示的属性定义
 -c|--contain-top    #是否包含顶部文件夹信息，即在输出目录再套一层module_path的basedir
 ```
 
