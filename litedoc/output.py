@@ -95,6 +95,7 @@ def generate_from_module(module_folder: str,
             rel_md_path = pyfile_path if with_top else no_module_name_pyfile_path
             for rk, rv in replace_data.items():
                 rel_md_path = rel_md_path.replace(rk, rv)
+            base_name = os.path.basename(rel_md_path)   # index.md
             abs_md_path = os.path.join(output_dir, rel_md_path)
 
             title = (pyfile_path.replace("\\", "/")
@@ -104,14 +105,17 @@ def generate_from_module(module_folder: str,
             # 获取模块信息
             ast_parser = AstParser(open(pyfile_path, "r", encoding="utf-8").read(), title=title, style=style)
             # 生成markdown
-            front_matter = {
+            config_front_matter = {
                     "title": title,
             }
 
             if frontmatter is not None:
-                front_matter.update(frontmatter)
+                config_front_matter.update(frontmatter)
 
-            md_content = generate(ast_parser, lang=lang, frontmatter=front_matter)
+            if base_name == "index.md":
+                config_front_matter["collapsed"] = "true"
+
+            md_content = generate(ast_parser, lang=lang, frontmatter=config_front_matter)
             file_data[abs_md_path] = md_content
             print(f"Output {pyfile_path} -> {abs_md_path}")
             generate_file_count += 1
