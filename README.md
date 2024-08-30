@@ -33,7 +33,8 @@ python -m litedoc <your_module_path> -o|--output <output_path>
 -cd|--class_define: "class" 类定义风格，输出的markdown显示的类定义
 -vd|--var_define: "var" 变量定义风格，输出的markdown显示的变量定义
 -ad|--attr_define: "attr" 属性定义风格，输出的markdown显示的属性定义
--c|--contain-top    #是否包含顶部文件夹信息，即在输出目录再套一层module_path的basedir
+-c|--contain-top    # 是否包含顶部文件夹信息，即在输出目录再套一层module_path的basedir
+-cs|--create_same  # 是否在包下创建和包名相同的md文件储存__init__文件的内容(有同名文件时请勿使用，例如client/client.py)
 ```
 
 在输出的目录下markdown文档是以模块原有的目录结构生成的，可以直接把输出内容放到目前主流的文档框架项目中，如VuePress，VitePress等，如果想优化用户体验，还可启用动态侧边栏

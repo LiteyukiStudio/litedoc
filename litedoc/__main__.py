@@ -25,11 +25,13 @@ def main():
     parser = argparse.ArgumentParser(description="Generate documentation from Python modules.")
     parser.add_argument("path", type=str, help="Path to the Python module or package.")
     parser.add_argument("-o", "--output", default="doc-output", type=str, help="Output directory.")
-    parser.add_argument("-c", "--contain-top", action="store_true", help="Whether to contain top-level dir in output dir.")
+    parser.add_argument("-c", "--contain_top", action="store_true", help="Whether to contain top-level dir in output dir.")
+    parser.add_argument("-cs", "--create_same", action="store_true",  help="Create same file with folder name")
     parser.add_argument("-l", "--lang", default="zh_Hans", type=str, help="Languages of the document.")
     parser.add_argument("-t", "--theme", default="vitepress", type=str, help="Theme of the document.")
     parser.add_argument("-s", "--style", default="google", type=str, help="Style of the document.")
     parser.add_argument("-f", "--frontmatter", default=None, type=str, help="Frontmatter of the document.")
+
     parser.add_argument("-fd", "--function_define", default="func", type=str, help="Function define of the document.")
     parser.add_argument("-md", "--method_define", default="method", type=str, help="Class function define of the document.")
     parser.add_argument("-cd", "--class_define", default="class", type=str, help="Class define of the document.")
@@ -57,7 +59,7 @@ def main():
         frontmatter = None
 
     generate_from_module(args.path, args.output, with_top=args.contain_top, lang=lang, theme=args.theme, style=args.style, frontmatter=frontmatter,
-                         fd=args.function_define, md=args.method_define, cd=args.class_define, vd=args.var_define, ad=args.attr_define)
+                         fd=args.function_define, md=args.method_define, cd=args.class_define, vd=args.var_define, ad=args.attr_define, cs=args.create_same)
 
 
 if __name__ == '__main__':
