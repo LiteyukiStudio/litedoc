@@ -50,9 +50,9 @@ class AssignNode(BaseModel):
         md = ""
         md += f"### var `{self.name}` = `{self.value}`\n\n"
         if self.type != TypeHint.NO_TYPEHINT:
-            md += f"- ***{get_text(lang, 'type')}***: `{self.type}`\n\n"
+            md += f"- **{get_text(lang, 'type')}**: `{self.type}`\n\n"
         if self.docs is not None:
-            md += f"- ***{get_text(lang, 'desc')}***: {self.docs}\n\n"
+            md += f"- **{get_text(lang, 'desc')}**: {self.docs}\n\n"
 
         return md
 
