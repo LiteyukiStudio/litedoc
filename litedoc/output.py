@@ -108,7 +108,7 @@ def generate_from_module(module_folder: str,
                      .replace(".py", "")
                      .replace(".__init__", ""))
             # 获取模块信息
-            ast_parser = AstParser(open(pyfile_path, "r", encoding="utf-8").read(), title=title, style=style)
+            ast_parser = AstParser(open(pyfile_path, "r", encoding="utf-8").read(), title=title, style=style, file_path=no_module_name_pyfile_path)
             # 生成markdown
             config_front_matter = {
                     "title": title,

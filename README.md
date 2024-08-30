@@ -28,13 +28,15 @@ litedoc <your_module_path> -o|--output <output_path>
 -t|--theme: "vitepress"  主题，支持vitepress, vuepress, 默认vitepress
 -s|--style: "google"  风格，支持google, numpy, reStructuredText, 默认google，但目前只实现了google，欢迎PR
 -f|--frontmatter:  #是否生成frontmatter，即文档的元数据，如title, description等, 格式为key1=value1,key2=value2, 空格用%20代替
--fd|--function_define: "func" 函数定义风格，输出的markdown显示的函数定义，Python原生为def
--md|--method_define: "method" 方法定义风格，输出的markdown显示的方法定义
--cd|--class_define: "class" 类定义风格，输出的markdown显示的类定义
--vd|--var_define: "var" 变量定义风格，输出的markdown显示的变量定义
--ad|--attr_define: "attr" 属性定义风格，输出的markdown显示的属性定义
+-b|--base-url: ""  基础URL，用于生成文档中的跳转链接，通常指向Github仓库下的包路径根目录，
+    如果为空字符串将不生成，末尾带/，例如https://github.com/snowykami/mbcp/tree/main/mbcp/
+-fd|--function-define: "func" 函数定义风格，输出的markdown显示的函数定义，Python原生为def
+-md|--method-define: "method" 方法定义风格，输出的markdown显示的方法定义
+-cd|--class-define: "class" 类定义风格，输出的markdown显示的类定义
+-vd|--var-define: "var" 变量定义风格，输出的markdown显示的变量定义
+-ad|--attr-define: "attr" 属性定义风格，输出的markdown显示的属性定义
 -c|--contain-top    # 是否包含顶部文件夹信息，即在输出目录再套一层module_path的basedir
--cs|--create_same  # 是否在包下创建和包名相同的md文件储存__init__文件的内容(有同名文件时请勿使用，例如client/client.py)
+-cs|--create-same  # 是否在包下创建和包名相同的md文件储存__init__文件的内容(有同名文件时请勿使用，例如client/client.py)
 ```
 
 在输出的目录下markdown文档是以模块原有的目录结构生成的，可以直接把输出内容放到目前主流的文档框架项目中，如VuePress，VitePress等，如果想优化用户体验，还可启用动态侧边栏

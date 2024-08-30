@@ -20,6 +20,7 @@ i18n_dict: dict[str, NestedDict] = {  # @litedoc-hide
                 "src"      : "Source code",
                 "desc"     : "Description",
                 "type"     : "Type",
+                "view_on_github": "View on GitHub",
         },
         "zh-Hans": {
                 "docstring": {
@@ -33,6 +34,7 @@ i18n_dict: dict[str, NestedDict] = {  # @litedoc-hide
                 "src"      : "源代码",
                 "desc"     : "说明",
                 "type"     : "类型",
+                "view_on_github": "在GitHub上查看",
         },
         "zh-Hant": {
                 "docstring": {
@@ -46,6 +48,7 @@ i18n_dict: dict[str, NestedDict] = {  # @litedoc-hide
                 "src"      : "源碼",
                 "desc"     : "説明",
                 "type"     : "類型",
+                "view_on_github": "在GitHub上查看",
         },
         "ja"     : {
                 "docstring": {
@@ -59,6 +62,7 @@ i18n_dict: dict[str, NestedDict] = {  # @litedoc-hide
                 "src"      : "ソースコード",
                 "desc"     : "説明",
                 "type"     : "タイプ",
+                "view_on_github": "GitHubで表示",
         },
 }  # @litedoc-hide
 

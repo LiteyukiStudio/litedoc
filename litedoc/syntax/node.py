@@ -141,6 +141,9 @@ class FunctionNode(BaseModel):
     kw_defaults: list[ConstantNode] = []
     defaults: list[ConstantNode] = []
 
+    lineno: int = 0
+    module_file_path: str = ""  # 去头路径，不包含模块顶级文件夹
+
     return_: str = TypeHint.NO_RETURN
     decorators: list[str] = []
     src: str
@@ -282,7 +285,14 @@ class FunctionNode(BaseModel):
         else:
             pass
         # 源码展示
-        md += PREFIX + f"\n<details>\n<summary> <b>{get_text(lang, 'src')}</b> </summary>\n\n```python\n{self.src}\n```\n</details>\n\n"
+        if kwargs.get("bu", None):
+            # 源码链接
+            self.module_file_path =  self.module_file_path.replace("\\", "/")
+            origin_url = kwargs.get("bu") + f"{self.module_file_path}#L{self.lineno}"
+            a_tag = f"\n\n[{get_text(lang, 'view_on_github')}]({origin_url})"
+        else:
+            a_tag = ""
+        md += PREFIX + f"\n<details>\n<summary> <b>{get_text(lang, 'src')}</b> </summary>{a_tag}\n\n```python\n{self.src}\n```\n</details>\n\n"
 
         return md
 

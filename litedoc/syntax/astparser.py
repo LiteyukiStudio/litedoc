@@ -16,18 +16,22 @@ from ..docstring.parser import parse
 
 
 class AstParser:
-    def __init__(self, code: str, title: Optional[str] = None, style: str = "google"):
+    def __init__(self, code: str, title: Optional[str] = None, style: str = "google", file_path: Optional[str] = None):
         """
         从一个文件的代码解析AST
         Args:
             code: 代码
             style: 注释风格
+            title: 模块标题
+            file_path: Python文件路径
         """
         self.style = style
         self.code = code
         self.tree = ast.parse(code)
         self.title = title
         """模块标题, 通常位于文件开头的单行注释, 会被解析为h1"""
+
+        self.file_path = file_path
 
         self.description = parse(ast.get_docstring(self.tree), parser=self.style) if ast.get_docstring(self.tree) else None
         """模块描述, 通常位于文件开头的多行注释"""
@@ -151,7 +155,9 @@ class AstParser:
                             decorators=[ast.unparse(decorator).strip() for decorator in sub_node.decorator_list],
                             is_async=isinstance(sub_node, ast.AsyncFunctionDef),
                             src=ast.unparse(sub_node).strip(),
-                            is_classmethod=True
+                            is_classmethod=True,
+                            lineno=sub_node.lineno,
+                            module_file_path=self.file_path
                         ))
                     elif isinstance(sub_node, (ast.Assign, ast.AnnAssign)):
                         if isinstance(sub_node, ast.Assign):
@@ -220,7 +226,9 @@ class AstParser:
                     return_=self.clear_quotes(ast.unparse(node.returns).strip()) if node.returns else TypeHint.NO_RETURN,
                     decorators=[ast.unparse(decorator).strip() for decorator in node.decorator_list],
                     is_async=isinstance(node, ast.AsyncFunctionDef),
-                    src=ast.unparse(node).strip()
+                    src=ast.unparse(node).strip(),
+                    lineno=node.lineno,
+                    module_file_path=self.file_path
                 )
                 self.functions.append(function_node)
                 self.all_nodes.append(function_node)
