@@ -53,7 +53,7 @@ class Docstring(BaseModel):
     attrs: list[Attr] = []
     return_: Optional[Return] = None
     raise_: list[Exception_] = []
-    example: list[Example] = []
+    example: Optional[str] = None
 
     def add_desc(self, desc: str):
         if self.desc == "":
@@ -73,8 +73,11 @@ class Docstring(BaseModel):
     def add_raise(self, name: str, desc: str = ""):
         self.raise_.append(Exception_(name=name, desc=desc))
 
-    def add_example(self, desc: str = "", input_: str = "", output: str = ""):
-        self.example.append(Example(desc=desc, input=input_, output=output))
+    def add_example(self, desc: str = ""):
+        if self.example is None:
+            self.example = desc
+        else:
+            self.example += "\n" + desc
 
     def reduction(self, style: str = "google") -> str:
         """
@@ -106,15 +109,13 @@ class Docstring(BaseModel):
 
             if self.example:
                 ret += "Examples:\n"
-                for example in self.example:
-                    ret += f"    {example.desc}\n        Input: {example.input}\n        Output: {example.output}\n"
+                ret += f"    {self.example}\n"
         return ret
 
-    def markdown(self, lang: str, indent: int = 4, is_classmethod: bool = False) -> str:
+    def markdown(self, lang: str, indent: int = 4) -> str:
         """
         生成markdown文档
         Args:
-            is_classmethod:
             lang:
             indent:
 
@@ -144,14 +145,14 @@ class Docstring(BaseModel):
         if self.return_ is not None:
             ret += PREFIX + f"\n**{get_text(lang, 'docstring.return')}**: {self.return_.desc}\n"
         # 复数属性
+        if self.example:
+            ret += PREFIX + f"\n**{get_text(lang, 'docstring.example')}**:\n"
+            ret += self.example + "\n"
         if self.raise_:
             ret += PREFIX + f"\n**{get_text(lang, 'docstring.raises')}**:\n"
             for exception in self.raise_:
                 ret += PREFIX + f"> - {exception.name}  {exception.desc}\n"
-        if self.example:
-            ret += PREFIX + f"\n**{get_text(lang, 'docstring.example')}**:\n"
-            for example in self.example:
-                ret += PREFIX + f"  - {example.desc}\n>        **{get_text(lang, 'docs.input')}**: {example.input}\n>        **{get_text(lang, 'docs.output')}**: {example.output}\n"
+
         return ret
 
     def __str__(self):

@@ -9,6 +9,7 @@ Copyright (C) 2020-2024 LiteyukiStudio. All Rights Reserved
 @Software: PyCharm
 """
 import os.path
+import traceback
 from typing import Optional
 
 from litedoc.style.markdown import generate
@@ -127,6 +128,7 @@ def generate_from_module(module_folder: str,
             generate_file_count += 1
         except Exception as e:
             print(f"Error in {pyfile_path}: {e}")
+            traceback.print_exc()
 
     for fn, content in file_data.items():
         write_to_file(content, fn)

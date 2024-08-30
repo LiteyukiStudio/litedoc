@@ -126,6 +126,13 @@ def curry(func: MultiVarsFunc, *args: Var) -> OneVarFunc:
         *args: 参数
     Returns:
         柯里化后的函数
+    Examples:
+        ```python
+        def add(a: int, b: int, c: int) -> int:
+            return a + b + c
+        add_curried = curry(add, 1, 2)
+        add_curried(3)  # 6
+        ```
     """
 
     def curried_func(*args2: Var) -> Var:
