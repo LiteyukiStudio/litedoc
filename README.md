@@ -17,7 +17,7 @@ pip install litedoc
 ## 使用方法
 
 ```shell
-python -m litedoc <your_module_path> -o|--output <output_path>
+litedoc <your_module_path> -o|--output <output_path>
 ```
 
 #### 详细命令参数
