@@ -290,9 +290,11 @@ class FunctionNode(BaseModel):
             origin_url = kwargs.get("bu") + f"{self.module_file_path}#L{self.lineno}"
             # a_tag = f"\n\n[{get_text(lang, 'view_on_github')}]({origin_url})"
             a_tag = f"<a href='{origin_url}' target='_blank'>{get_text(lang, 'view_on_github')}</a>"
+            or_and_a = f" {get_text(lang, 'or')} {a_tag}"
         else:
             a_tag = ""
-        md += PREFIX + f"\n<details>\n<summary> <b>{get_text(lang, 'src')}</b> {get_text(lang, 'or')} {a_tag}</summary>\n\n```python\n{self.src}\n```\n</details>\n\n"
+            or_and_a = ""
+        md += PREFIX + f"\n<details>\n<summary> <b>{get_text(lang, 'src')}</b>{or_and_a}</summary>\n\n```python\n{self.src}\n```\n</details>\n\n"
 
         return md
 
