@@ -95,16 +95,15 @@ def generate_from_module(module_folder: str,
                 rel_md_path = rel_md_path.replace(rk, rv)
             abs_md_path = os.path.join(output_dir, rel_md_path)
 
+            title = (pyfile_path.replace("\\", "/")
+                     .replace("/", ".")
+                     .replace(".py", "")
+                     .replace(".__init__", ""))
             # 获取模块信息
-            ast_parser = AstParser(open(pyfile_path, "r", encoding="utf-8").read())
-
+            ast_parser = AstParser(open(pyfile_path, "r", encoding="utf-8").read(), title=title)
             # 生成markdown
             front_matter = {
-                    "title": pyfile_path.replace("\\", "/").
-                    replace("/", ".").
-                    replace(".py", "").
-                    replace(".__init__", ""),
-
+                    "title": title,
             }
             md_content = generate(ast_parser, lang=lang, frontmatter=front_matter)
             file_data[abs_md_path] = md_content
