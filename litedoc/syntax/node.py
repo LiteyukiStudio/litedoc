@@ -58,7 +58,6 @@ class AssignNode(BaseModel):
         return md
 
 
-
 class ArgNode(BaseModel):
     """
     ArgNode is a pydantic model that represents an argument.
@@ -151,18 +150,18 @@ class FunctionNode(BaseModel):
     is_classmethod: bool = False
 
     magic_methods: dict[str, str] = {
-            "__add__"    : "+",
-            "__radd__"   : "+",
-            "__sub__"    : "-",
-            "__rsub__"   : "-",
-            "__mul__"    : "*",
-            "__rmul__"   : "*",
-            "__matmul__" : "@",
-            "__rmatmul__": "@",
-            "__mod__"    : "%",
-            "__truediv__": "/",
+            "__add__"     : "+",
+            "__radd__"    : "+",
+            "__sub__"     : "-",
+            "__rsub__"    : "-",
+            "__mul__"     : "*",
+            "__rmul__"    : "*",
+            "__matmul__"  : "@",
+            "__rmatmul__" : "@",
+            "__mod__"     : "%",
+            "__truediv__" : "/",
             "__rtruediv__": "/",
-            "__neg__"    : "-",
+            "__neg__"     : "-",
     }  # 魔术方法, 例如运算符
 
     def is_private(self):
@@ -287,12 +286,13 @@ class FunctionNode(BaseModel):
         # 源码展示
         if kwargs.get("bu", None):
             # 源码链接
-            self.module_file_path =  self.module_file_path.replace("\\", "/")
+            self.module_file_path = self.module_file_path.replace("\\", "/")
             origin_url = kwargs.get("bu") + f"{self.module_file_path}#L{self.lineno}"
-            a_tag = f"\n\n[{get_text(lang, 'view_on_github')}]({origin_url})"
+            # a_tag = f"\n\n[{get_text(lang, 'view_on_github')}]({origin_url})"
+            a_tag = f"<a href='{origin_url}' target='_blank'>{get_text(lang, 'view_on_github')}</a>"
         else:
             a_tag = ""
-        md += PREFIX + f"\n<details>\n<summary> <b>{get_text(lang, 'src')}</b> </summary>{a_tag}\n\n```python\n{self.src}\n```\n</details>\n\n"
+        md += PREFIX + f"\n<details>\n<summary> <b>{get_text(lang, 'src')}</b> {get_text(lang, 'or')} {a_tag}</summary>\n\n```python\n{self.src}\n```\n</details>\n\n"
 
         return md
 
