@@ -113,7 +113,7 @@ class GoogleDocstringParser(Parser):
         解析示例行
         """
         while line := self.match_next_line():
-            self.docstring.add_example(line.strip())
+            self.docstring.add_example(line if line.startswith("    ") else line.strip())
 
     def parse_attrs(self):
         """
