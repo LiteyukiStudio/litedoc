@@ -50,9 +50,9 @@ class AssignNode(BaseModel):
         md = ""
         md += f"### var `{self.name}` = `{self.value}`\n\n"
         if self.type != TypeHint.NO_TYPEHINT:
-            md += f"- **{get_text(lang, 'type')}**: `{self.type}`\n\n"
+            md += f"- ***{get_text(lang, 'type')}***: `{self.type}`\n\n"
         if self.docs is not None:
-            md += f"- **{get_text(lang, 'desc')}**: {self.docs}\n\n"
+            md += f"- ***{get_text(lang, 'desc')}***: {self.docs}\n\n"
 
         return md
 
@@ -335,7 +335,7 @@ class ClassNode(BaseModel):
                 "__repr__",
         ]
         md = ""
-        md += f"### **class** `{self.name}"
+        md += f"### ***class*** `{self.name}"
         if len(self.inherits) > 0:
             md += f"({', '.join([cls for cls in self.inherits])})"
         md += "`\n"
