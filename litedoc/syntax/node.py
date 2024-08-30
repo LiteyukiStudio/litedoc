@@ -256,6 +256,8 @@ class FunctionNode(BaseModel):
         """此处预留docstring"""
         if self.docs is not None:
             md += f"\n{self.docs.markdown(lang, indent)}\n"
+            if "cal_gradient_3vf" in self.name:
+                print(self.docs.raw)
         else:
             pass
         # 源码展示

@@ -47,6 +47,7 @@ class Example(BaseModel):
 
 
 class Docstring(BaseModel):
+    raw: str = ""
     desc: str = ""
     args: list[Args] = []
     attrs: list[Attr] = []

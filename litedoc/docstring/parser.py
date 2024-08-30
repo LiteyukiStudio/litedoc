@@ -50,7 +50,7 @@ class GoogleDocstringParser(Parser):
         self.lineno = 0  # Current line number
         self.char = 0  # Current character position
 
-        self.docstring = Docstring()
+        self.docstring = Docstring(raw=docstring)
 
     def read_line(self, move: bool = True) -> str:
         """
