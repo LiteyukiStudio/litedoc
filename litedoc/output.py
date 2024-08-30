@@ -9,6 +9,7 @@ Copyright (C) 2020-2024 LiteyukiStudio. All Rights Reserved
 @Software: PyCharm
 """
 import os.path
+from typing import Optional
 
 from litedoc.style.markdown import generate
 from litedoc.syntax.astparser import AstParser
@@ -54,7 +55,8 @@ def generate_from_module(module_folder: str,
                          lang: str = "zh-Hans",
                          ignored_paths=None,
                          theme: str = "vitepress",
-                         style: str = "google"
+                         style: str = "google",
+                         frontmatter: Optional[dict] = None
                          ):
     """
     生成文档
@@ -100,11 +102,15 @@ def generate_from_module(module_folder: str,
                      .replace(".py", "")
                      .replace(".__init__", ""))
             # 获取模块信息
-            ast_parser = AstParser(open(pyfile_path, "r", encoding="utf-8").read(), title=title)
+            ast_parser = AstParser(open(pyfile_path, "r", encoding="utf-8").read(), title=title, style=style)
             # 生成markdown
             front_matter = {
                     "title": title,
             }
+
+            if frontmatter is not None:
+                front_matter.update(frontmatter)
+
             md_content = generate(ast_parser, lang=lang, frontmatter=front_matter)
             file_data[abs_md_path] = md_content
             print(f"Output {pyfile_path} -> {abs_md_path}")

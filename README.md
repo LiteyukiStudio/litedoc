@@ -27,6 +27,7 @@ python -m litedoc <your_module_path> -o|--output <output_path>
 -l|--lang:   "zh-Hans"  语言，支持en, zh-Hans，zh-Hant，ja，默认zh-Hans
 -t|--theme: "vitepress"  主题，支持vitepress, vuepress, 默认vitepress
 -s|--style: "google"  风格，支持google, numpy, reStructuredText, 默认google，但目前只实现了google，欢迎PR
+-f|--frontmatter:  #是否生成frontmatter，即文档的元数据，如title, description等, 格式为key1=value1,key2=value2, 空格用%20代替
 -c|--contain-top    #是否包含顶部文件夹信息，即在输出目录再套一层module_path的basedir
 ```
 
