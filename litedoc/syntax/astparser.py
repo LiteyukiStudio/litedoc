@@ -16,9 +16,9 @@ from ..docstring.parser import parse
 
 
 class AstParser:
-    def __init__(self, code: str, style: str = "google"):
+    def __init__(self, code: str, title: Optional[str] = None, style: str = "google"):
         """
-        从代码解析AST
+        从一个文件的代码解析AST
         Args:
             code: 代码
             style: 注释风格
@@ -26,10 +26,16 @@ class AstParser:
         self.style = style
         self.code = code
         self.tree = ast.parse(code)
+        self.title = title
+        """模块标题, 通常位于文件开头的单行注释, 会被解析为h1"""
 
+        self.description = parse(ast.get_docstring(self.tree), parser=self.style) if ast.get_docstring(self.tree) else None
+        """模块描述, 通常位于文件开头的多行注释"""
         self.classes: list[ClassNode] = []
         self.functions: list[FunctionNode] = []
         self.variables: list[AssignNode] = []
+
+        self.all_nodes: list[ClassNode | FunctionNode | AssignNode] = []
 
         self.parse()
 
@@ -90,6 +96,7 @@ class AstParser:
                     inherits=[ast.unparse(base) for base in node.bases]
                 )
                 self.classes.append(class_node)
+                self.all_nodes.append(class_node)
 
                 # 继续遍历类内部的函数
                 for sub_node in node.body:
@@ -146,27 +153,27 @@ class AstParser:
                             src=ast.unparse(sub_node).strip(),
                             is_classmethod=True
                         ))
-                    # elif isinstance(sub_node, (ast.Assign, ast.AnnAssign)):
-                    #     if isinstance(sub_node, ast.Assign):
-                    #         class_node.attrs.append(AttrNode(
-                    #             name=sub_node.targets[0].id,  # type: ignore
-                    #             type=TypeHint.NO_TYPEHINT,
-                    #             value=ast.unparse(sub_node.value).strip()
-                    #         ))
-                    #     elif isinstance(sub_node, ast.AnnAssign):
-                    #         class_node.attrs.append(AttrNode(
-                    #             name=sub_node.target.id,
-                    #             type=ast.unparse(sub_node.annotation).strip(),
-                    #             value=ast.unparse(sub_node.value).strip() if sub_node.value else TypeHint.NO_DEFAULT
-                    #         ))
-                    #     else:
-                    #         raise ValueError(f"Unsupported node type: {type(sub_node)}")
+                    elif isinstance(sub_node, (ast.Assign, ast.AnnAssign)):
+                        if isinstance(sub_node, ast.Assign):
+                            class_node.attrs.append(AttrNode(
+                                name=sub_node.targets[0].id,  # type: ignore
+                                type=TypeHint.NO_TYPEHINT,
+                                value=ast.unparse(sub_node.value).strip()
+                            ))
+                        elif isinstance(sub_node, ast.AnnAssign):
+                            class_node.attrs.append(AttrNode(
+                                name=sub_node.target.id,
+                                type=ast.unparse(sub_node.annotation).strip(),
+                                value=ast.unparse(sub_node.value).strip() if sub_node.value else TypeHint.NO_DEFAULT
+                            ))
+                        else:
+                            raise ValueError(f"Unsupported node type: {type(sub_node)}")
 
             elif isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
                 # 仅打印模块级别的函数
                 if not self._is_module_level_function(node):
                     continue
-                self.functions.append(FunctionNode(
+                function_node = FunctionNode(
                     name=node.name,
                     docs=parse(ast.get_docstring(node), parser=self.style) if ast.get_docstring(node) else None,
                     posonlyargs=[
@@ -214,7 +221,9 @@ class AstParser:
                     decorators=[ast.unparse(decorator).strip() for decorator in node.decorator_list],
                     is_async=isinstance(node, ast.AsyncFunctionDef),
                     src=ast.unparse(node).strip()
-                ))
+                )
+                self.functions.append(function_node)
+                self.all_nodes.append(function_node)
 
             elif isinstance(node, (ast.Assign, ast.AnnAssign)):
                 if not self._is_module_level_variable2(node):
@@ -241,19 +250,23 @@ class AstParser:
                 if isinstance(node, ast.Assign):
                     for target in node.targets:
                         if isinstance(target, ast.Name):
-                            self.variables.append(AssignNode(
+                            ass_node = AssignNode(
                                 name=target.id,
                                 value=ast.unparse(node.value).strip(),
                                 type=ast.unparse(node.annotation).strip() if isinstance(node, ast.AnnAssign) else TypeHint.NO_TYPEHINT,
                                 docs=docs
-                            ))
+                            )
+                            self.variables.append(ass_node)
+                            self.all_nodes.append(ass_node)
                 if isinstance(node, ast.AnnAssign):
-                    self.variables.append(AssignNode(
+                    annass_node = AssignNode(
                         name=node.target.id,
                         value=ast.unparse(node.value).strip() if node.value else TypeHint.NO_DEFAULT,
                         type=ast.unparse(node.annotation).strip(),
                         docs=docs
-                    ))
+                    )
+                    self.variables.append(annass_node)
+                    self.all_nodes.append(annass_node)
 
     def _is_module_level_function(self, node: ast.FunctionDef | ast.AsyncFunctionDef):
         for parent in ast.walk(self.tree):

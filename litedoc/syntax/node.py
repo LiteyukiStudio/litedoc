@@ -39,6 +39,24 @@ class AssignNode(BaseModel):
     value: str
     docs: Optional[str] = ""
 
+    def markdown(self, lang: str) -> str:
+        """
+        Args:
+            lang: str
+                The language of the
+        Returns:
+            markdown style document
+        """
+        md = ""
+        md += f"### var `{self.name}` = `{self.value}`\n\n"
+        if self.type != TypeHint.NO_TYPEHINT:
+            md += f"- **{get_text(lang, 'type')}**: `{self.type}`\n\n"
+        if self.docs is not None:
+            md += f"- **{get_text(lang, 'desc')}**: {self.docs}\n\n"
+
+        return md
+
+
 
 class ArgNode(BaseModel):
     """
@@ -256,8 +274,6 @@ class FunctionNode(BaseModel):
         """此处预留docstring"""
         if self.docs is not None:
             md += f"\n{self.docs.markdown(lang, indent)}\n"
-            if "cal_gradient_3vf" in self.name:
-                print(self.docs.raw)
         else:
             pass
         # 源码展示

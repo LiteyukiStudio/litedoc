@@ -37,29 +37,22 @@ def generate(parser: AstParser, lang: str, frontmatter: Optional[dict] = None, s
     else:
         md = ""
 
-    # var > func > class
+    # 添加标题，如果有
+    if parser.title is not None:
+        md += f"# {parser.title}\n\n"
 
-    """遍历函数"""
-    for func in parser.functions:
-        # 仅给有注释的函数生成文档
-        if func.name.startswith("_"):
-            continue
-        if func.docs is not None and litedoc_hide in func.docs.reduction():
-            continue
-        md += func.markdown(lang)
+    # 添加描述，如果有
+    if parser.description is not None:
+        md += f"{parser.description.markdown(lang)}\n\n"
 
-    """遍历类"""
-
-    for cls in parser.classes:
-        md += cls.markdown(lang)
-
-    """遍历变量"""
-    for var in parser.variables:
-        # 仅给有注释的变量生成文档
-        if var.docs is not None and litedoc_hide not in var.docs:
-            md += f"### ***var*** `{var.name} = {var.value}`\n\n"
-            if var.type != TypeHint.NO_TYPEHINT:
-                md += f"- **{get_text(lang, 'type')}**: `{var.type}`\n\n"
-            md += f"- **{get_text(lang, 'desc')}**: {var.docs}\n\n"
-
+    for node in parser.all_nodes:
+        if isinstance(node, FunctionNode):
+            if node.name.startswith("_") or (node.docs is not None and litedoc_hide in node.docs.reduction()):
+                continue
+            md += node.markdown(lang)
+        elif isinstance(node, ClassNode):
+            md += node.markdown(lang)
+        elif isinstance(node, AssignNode):
+            if node.docs is not None and litedoc_hide not in node.docs:
+                md += node.markdown(lang)
     return md

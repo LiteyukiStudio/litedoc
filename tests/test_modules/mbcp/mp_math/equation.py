@@ -1,12 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Copyright (C) 2020-2024 LiteyukiStudio. All Rights Reserved 
-
-@Time    : 2024/8/9 上午11:32
-@Author  : snowykami
-@Email   : snowykami@outlook.com
-@File    : equation.py
-@Software: PyCharm
+本模块定义了一些数学方程相关的函数。
 """
 
 from mbcp.mp_math.mp_math_typing import OneVarFunc, Var, MultiVarsFunc, Number
