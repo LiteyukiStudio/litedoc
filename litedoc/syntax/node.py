@@ -177,13 +177,14 @@ class FunctionNode(BaseModel):
         """
         return self.name.startswith("__") and self.name.endswith("__")
 
-    def markdown(self, lang: str, indent: int = 0) -> str:
+    def markdown(self, lang: str, indent: int = 0, **kwargs) -> str:
         """
         Args:
             indent: int
                 The number of spaces to indent the markdown.
             lang: str
                 The language of the
+            **kwargs: more parameters
         Returns:
             markdown style document
         """
@@ -191,7 +192,7 @@ class FunctionNode(BaseModel):
         PREFIX = "" * indent
         # if is_classmethod:
         #     PREFIX = "- #"
-        func_type = "func" if not self.is_classmethod else "method"
+        func_type = kwargs.get("fd", "func") if not self.is_classmethod else kwargs.get("md", "method")
         h_level = 3 if not self.is_classmethod else 4
         h = "#" * h_level
         """标题等级"""
@@ -318,7 +319,7 @@ class ClassNode(BaseModel):
     methods: list[FunctionNode] = []
     inherits: list[str] = []
 
-    def markdown(self, lang: str) -> str:
+    def markdown(self, lang: str, **kwargs) -> str:
         """
         返回类的markdown文档
         Args:
@@ -339,7 +340,7 @@ class ClassNode(BaseModel):
         for method in self.methods:
             if method.name in hidden_methods:
                 continue
-            md += method.markdown(lang, 2)
+            md += method.markdown(lang, 2, **kwargs)
         for attr in self.attrs:
             if attr.type == TypeHint.NO_TYPEHINT:
                 md += f"#### ***attr*** `{attr.name} = {attr.value}`\n\n"

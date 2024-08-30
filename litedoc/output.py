@@ -56,7 +56,8 @@ def generate_from_module(module_folder: str,
                          ignored_paths=None,
                          theme: str = "vitepress",
                          style: str = "google",
-                         frontmatter: Optional[dict] = None
+                         frontmatter: Optional[dict] = None,
+                         **kwargs
                          ):
     """
     生成文档
@@ -68,6 +69,7 @@ def generate_from_module(module_folder: str,
         lang: 语言
         theme: 主题
         style: 样式
+        frontmatter:
     """
     if ignored_paths is None:
         ignored_paths = []
@@ -115,7 +117,7 @@ def generate_from_module(module_folder: str,
             if base_name == "index.md":
                 config_front_matter["collapsed"] = "true"
 
-            md_content = generate(ast_parser, lang=lang, frontmatter=config_front_matter)
+            md_content = generate(ast_parser, lang=lang, frontmatter=config_front_matter, **kwargs)
             file_data[abs_md_path] = md_content
             print(f"Output {pyfile_path} -> {abs_md_path}")
             generate_file_count += 1

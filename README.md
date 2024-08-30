@@ -28,6 +28,8 @@ python -m litedoc <your_module_path> -o|--output <output_path>
 -t|--theme: "vitepress"  主题，支持vitepress, vuepress, 默认vitepress
 -s|--style: "google"  风格，支持google, numpy, reStructuredText, 默认google，但目前只实现了google，欢迎PR
 -f|--frontmatter:  #是否生成frontmatter，即文档的元数据，如title, description等, 格式为key1=value1,key2=value2, 空格用%20代替
+-fd|--function_define: "func" 函数定义风格，输出的markdown显示的函数定义，Python原生为def
+-md|--method_define: "method" 方法定义风格，输出的markdown显示的方法定义
 -c|--contain-top    #是否包含顶部文件夹信息，即在输出目录再套一层module_path的basedir
 ```
 
