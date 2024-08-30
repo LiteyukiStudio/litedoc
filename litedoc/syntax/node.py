@@ -192,17 +192,20 @@ class FunctionNode(BaseModel):
         # if is_classmethod:
         #     PREFIX = "- #"
         func_type = "func" if not self.is_classmethod else "method"
+        h_level = 3 if not self.is_classmethod else 4
+        h = "#" * h_level
+        """标题等级"""
 
         md = ""
         # 装饰器部分
         if len(self.decorators) > 0:
             for decorator in self.decorators:
-                md += PREFIX + f"### `@{decorator}`\n"
+                md += PREFIX + f"{h} `@{decorator}`\n"
 
         if self.is_async:
-            md += PREFIX + f"### ***async {func_type}*** "
+            md += PREFIX + f"{h} ***async {func_type}*** "
         else:
-            md += PREFIX + f"### ***{func_type}*** "
+            md += PREFIX + f"{h} ***{func_type}*** "
 
         # code start
         # 配对位置参数和位置参数默认值，无默认值用TypeHint.NO_DEFAULT
