@@ -82,35 +82,37 @@ def generate_from_module(module_folder: str,
             ".py"     : ".md",
     }
 
+    total_file_count = len(file_list)
+    generate_file_count = 0
     for pyfile_path in file_list:
-        if any(ignored_path.replace("\\", "/") in pyfile_path.replace("\\", "/") for ignored_path in ignored_paths):
-            continue
+        try:
+            if any(ignored_path.replace("\\", "/") in pyfile_path.replace("\\", "/") for ignored_path in ignored_paths):
+                continue
+            no_module_name_pyfile_path = get_relative_path(module_folder, pyfile_path)  # 去头路径
+            # markdown相对路径
+            rel_md_path = pyfile_path if with_top else no_module_name_pyfile_path
+            for rk, rv in replace_data.items():
+                rel_md_path = rel_md_path.replace(rk, rv)
+            abs_md_path = os.path.join(output_dir, rel_md_path)
 
-        no_module_name_pyfile_path = get_relative_path(module_folder, pyfile_path)  # 去头路径
+            # 获取模块信息
+            ast_parser = AstParser(open(pyfile_path, "r", encoding="utf-8").read())
 
-        # markdown相对路径
-        rel_md_path = pyfile_path if with_top else no_module_name_pyfile_path
-        for rk, rv in replace_data.items():
-            rel_md_path = rel_md_path.replace(rk, rv)
+            # 生成markdown
+            front_matter = {
+                    "title": pyfile_path.replace("\\", "/").
+                    replace("/", ".").
+                    replace(".py", "").
+                    replace(".__init__", ""),
 
-        abs_md_path = os.path.join(output_dir, rel_md_path)
-
-        # 获取模块信息
-        ast_parser = AstParser(open(pyfile_path, "r", encoding="utf-8").read())
-
-        # 生成markdown
-
-        front_matter = {
-                "title": pyfile_path.replace("\\", "/").
-                replace("/", ".").
-                replace(".py", "").
-                replace(".__init__", ""),
-
-        }
-
-        md_content = generate(ast_parser, lang=lang, frontmatter=front_matter)
-        print(f"Generate {pyfile_path} -> {abs_md_path}")
-        file_data[abs_md_path] = md_content
+            }
+            md_content = generate(ast_parser, lang=lang, frontmatter=front_matter)
+            file_data[abs_md_path] = md_content
+            print(f"Output {pyfile_path} -> {abs_md_path}")
+            generate_file_count += 1
+        except Exception as e:
+            print(f"Error in {pyfile_path}: {e}")
 
     for fn, content in file_data.items():
         write_to_file(content, fn)
+    print(f"\nComplete:    {generate_file_count}/{total_file_count} success    {total_file_count - generate_file_count} failed\n")
