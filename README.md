@@ -66,8 +66,9 @@ litedoc <your_module_path> -o|--output <output_path>
 - name: Build API markdown
   run: |-
     python -m pip install litedoc
-    python -m litedoc <your_module> -o docs/dev/api -l zh-Hans -t vuepress
-    python -m litedoc <your_module> -o docs/en/dev/api -l en -t vuepress'   # 请自行更改这部分
+    litedoc <your_module> -o docs/dev/api -l zh-Hans -t vuepress
+    litedoc <your_module> -o docs/en/dev/api -l en -t vuepress'   # 请自行更改这部分
+    # ...可以添加更多语言
 ...
 # build your static page
 ```
