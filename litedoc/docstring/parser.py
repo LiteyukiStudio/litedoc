@@ -17,6 +17,18 @@ def reduction(s: str) -> str:
     return s
 
 
+pre_handle_ph = {
+        "://": "%3A//",
+}
+
+
+def pre_handle(s: str) -> str:
+    """特殊字符保护"""
+    for k, v in pre_handle_ph.items():
+        s = s.replace(k, v)
+    return s
+
+
 class Parser:
     ...
 
@@ -56,7 +68,7 @@ class GoogleDocstringParser(Parser):
     }
 
     def __init__(self, docstring: str, indent: int = 4):
-        self.lines = docstring.splitlines()
+        self.lines = pre_handle(docstring).splitlines()
         self.indent = indent
         self.lineno = 0  # Current line number
         self.char = 0  # Current character position
