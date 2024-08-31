@@ -8,13 +8,12 @@ Copyright (C) 2020-2024 LiteyukiStudio. All Rights Reserved
 @File    : markdown.py
 @Software: PyCharm
 """
-from typing import Optional
 
 from litedoc.syntax.astparser import AstParser
 from litedoc.syntax.node import *
-from litedoc.i18n import get_text
+from litedoc.i18n import litedoc_hide
 
-litedoc_hide = "@litedoc-hide"
+
 
 
 def generate(parser: AstParser, lang: str, frontmatter: Optional[dict] = None, **kwargs) -> str:
@@ -48,6 +47,7 @@ def generate(parser: AstParser, lang: str, frontmatter: Optional[dict] = None, *
     for node in parser.all_nodes:
         if isinstance(node, FunctionNode):
             if node.name.startswith("_") or (node.docs is not None and litedoc_hide in node.docs.reduction()):
+                print("skip", node.name)
                 continue
             md += node.markdown(lang, **kwargs)
         elif isinstance(node, ClassNode):

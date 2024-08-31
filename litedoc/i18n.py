@@ -123,3 +123,5 @@ def get_text(lang: str, key: str, default: Optional[str] = None, fallback: Optio
         return i18n_flat_dict.get(fallback, {}).get(key, default or key)
     else:
         return default or key
+
+litedoc_hide = "@litedoc-hide"

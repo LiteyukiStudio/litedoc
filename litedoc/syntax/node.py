@@ -8,13 +8,12 @@ Copyright (C) 2020-2024 LiteyukiStudio. All Rights Reserved
 @File    : node.py
 @Software: PyCharm
 """
-from typing import Literal, Optional
-from enum import Enum
+from typing import Optional
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 from litedoc.docstring.docstring import Docstring
-from litedoc.i18n import get_text
+from litedoc.i18n import get_text, litedoc_hide
 
 
 class TypeHint:
@@ -363,7 +362,9 @@ class ClassNode(BaseModel):
             md += f"({', '.join([cls for cls in self.inherits])})"
         md += "`\n"
         for method in self.methods:
-            if method.name in hidden_methods:
+            if (method.name in hidden_methods or
+                    method.name.startswith("_") and not method.name.startswith("__") or
+                    method.docs is not None and litedoc_hide in method.docs.reduction()):
                 continue
             md += method.markdown(lang, 2, **kwargs)
         for attr in self.attrs:
