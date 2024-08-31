@@ -214,7 +214,7 @@ class FunctionNode(BaseModel):
         if len(self.decorators) > 0:
             for decorator in self.decorators:
                 if decorator in special_decorators:
-                    md += PREFIX + f"@[`{decorator}`]({special_decorators[decorator]})\n"
+                    md += PREFIX + f"[`@{decorator}`]({special_decorators[decorator]})\n"
                 else:
                     md += PREFIX + f"`@{decorator}`\n"
 
