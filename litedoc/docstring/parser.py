@@ -12,6 +12,7 @@ placeholder = {
 
 
 def reduction(s: str) -> str:
+    """还原特殊字符"""
     for k, v in placeholder.items():
         s = s.replace(k, v)
     return s

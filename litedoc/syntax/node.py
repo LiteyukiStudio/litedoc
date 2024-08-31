@@ -204,9 +204,19 @@ class FunctionNode(BaseModel):
 
         md = ""
         # 装饰器部分
+        # 特殊装饰器
+        special_decorators = {
+            "classmethod": "https://docs.python.org/3/library/functions.html#classmethod",
+            "staticmethod": "https://docs.python.org/3/library/functions.html#staticmethod",
+            "property": "https://docs.python.org/3/library/functions.html#property",
+            "abstractmethod": "https://docs.python.org/3/library/abc.html#abc.abstractmethod",
+        }
         if len(self.decorators) > 0:
             for decorator in self.decorators:
-                md += PREFIX + f"`@{decorator}`\n"
+                if decorator in special_decorators:
+                    md += PREFIX + f"@[`{decorator}`]({special_decorators[decorator]})\n"
+                else:
+                    md += PREFIX + f"`@{decorator}`\n"
 
         if self.is_async:
             md += PREFIX + f"{h} ***async {func_type}*** "
