@@ -85,7 +85,57 @@ litedoc <your_module_path> -o|--output <output_path>
 
 ## 其他
 
-### 函数参数
+### Liteyuki Docstring
+Liteyuki Docstring是Google风格docstring的超集，可以更好地配合Litedoc生成更美观的文档
+支持
+- `@litedoc-hide` 隐藏函数或变量
+- 链接跳转（需文档框架支持）
+- 更多的markdown语法
+
+示例
+- 以下是一个Google docstring示例
+```python
+def add(a: int, b: int) -> int:
+    """
+    This is a function to add two numbers
+    Args:
+        a: The first number
+        b: The second number
+    Returns:
+        The sum of a and b
+    """
+    return a + b
+```
+- 以下是一个Liteyuki docstring示例
+```python
+def add(a: int, b: int) -> int:
+    """
+    This is a function to add two numbers
+    Args:
+        a ([`int`](https%3A//docs.python.org/3/library/functions.html#int)): The first number
+        b (`int`) : The second number
+    Returns:
+        [`int`](https%3A//docs.python.org/3/library/functions.html#int): The sum of a and b
+    @litedoc-hide
+    """
+    return a + b
+```
+- 还可以在模块内部使用相对链接和哈希路由跳转到其他文档
+```python
+def add(a: int, b: int) -> int:
+    """
+    This is a function to add two numbers
+    Args:
+        a ([`int`](./int#class-int)): The first number
+        b (`int`) : The second number
+    Returns:
+        [`int`](./int#class-int): The sum of a and b
+    """
+    return a + b
+```
+以上写法不影响主流编辑器的docstring解析，但可以更好地配合Litedoc生成更美观的文档
+
+### Python函数参数
 
 - 一个Python函数可以有五种传参方式：仅位置参数(posonlyargs)、位置参数(args)、可变参数(vararg)、仅关键字参数(kwonlyargs)及关键字参数(kwarg)。以下是一个函数的参数的例子。
 
