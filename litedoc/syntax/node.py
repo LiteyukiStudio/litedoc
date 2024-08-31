@@ -49,11 +49,13 @@ class AssignNode(BaseModel):
         """
         vd = kwargs.get("vd", "var")
         md = ""
-        md += f"### {vd} `{self.name}` = `{self.value}`\n\n"
-        if self.type != TypeHint.NO_TYPEHINT:
-            md += f"- **{get_text(lang, 'type')}**: `{self.type}`\n\n"
+        md += f"### {vd} `{self.name}`\n\n"
         if self.docs is not None:
             md += f"- **{get_text(lang, 'desc')}**: {self.docs}\n\n"
+        if self.type != TypeHint.NO_TYPEHINT:
+            md += f"- **{get_text(lang, 'type')}**: `{self.type}`\n\n"
+        md += f"- **{get_text(lang, 'default_value')}**: `{self.value}`\n\n"
+
 
         return md
 
