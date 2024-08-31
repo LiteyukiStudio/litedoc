@@ -133,7 +133,7 @@ def add(a: int, b: int) -> int:
     """
     return a + b
 ```
-以上写法不影响主流编辑器的docstring解析，但可以更好地配合Litedoc生成更美观的文档
+以上写法不影响主流编辑器的Google docstring解析，但可以更好地配合Litedoc生成更美观的文档
 
 ### Python函数参数
 
