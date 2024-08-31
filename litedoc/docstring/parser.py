@@ -137,7 +137,7 @@ class GoogleDocstringParser(Parser):
         解析示例行
         """
         while line := self.match_next_line():
-            self.docstring.add_example(line if line.startswith("    ") else line.strip())
+            self.docstring.add_example(reduction(line if line.startswith("    ") else line.strip()))
 
     def parse_attrs(self):
         """
@@ -146,9 +146,9 @@ class GoogleDocstringParser(Parser):
         while line := self.match_next_line():
             if ":" in line:
                 name, desc = line.split(":", 1)
-                self.docstring.add_attrs(name.strip(), desc.strip())
+                self.docstring.add_attrs(reduction(name.strip()), reduction(desc.strip()))
             else:
-                self.docstring.add_attrs(line.strip())
+                self.docstring.add_attrs(reduction(line.strip()))
 
     def match_next_line(self) -> Optional[str]:
         """
@@ -175,7 +175,7 @@ class GoogleDocstringParser(Parser):
         while self.lineno < len(self.lines):
             token = self.match_token()
             if token is None and add_desc:
-                self.docstring.add_desc(self.lines[self.lineno].strip())
+                self.docstring.add_desc(reduction(self.lines[self.lineno].strip()))
 
             if token is not None:
                 add_desc = False
