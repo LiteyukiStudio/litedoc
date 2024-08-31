@@ -5,6 +5,17 @@ from typing import Optional
 
 from litedoc.docstring.docstring import Docstring
 
+placeholder = {
+        "%20": " ",
+        "%3A": ":",
+}
+
+
+def reduction(s: str) -> str:
+    for k, v in placeholder.items():
+        s = s.replace(k, v)
+    return s
+
 
 class Parser:
     ...
@@ -86,16 +97,16 @@ class GoogleDocstringParser(Parser):
         while line := self.match_next_line():
             if ":" in line:
                 name, desc = line.split(":", 1)
-                self.docstring.add_arg(name.strip(), desc.strip())
+                self.docstring.add_arg(reduction(name.strip()), reduction(desc.strip()))
             else:
-                self.docstring.add_arg(line.strip())
+                self.docstring.add_arg(reduction(line.strip()))
 
     def parse_return(self):
         """
         解析返回值行
         """
         if line := self.match_next_line():
-            self.docstring.add_return(line.strip())
+            self.docstring.add_return(reduction(line.strip()))
 
     def parse_raises(self):
         """
@@ -104,9 +115,9 @@ class GoogleDocstringParser(Parser):
         while line := self.match_next_line():
             if ":" in line:
                 name, desc = line.split(":", 1)
-                self.docstring.add_raise(name.strip(), desc.strip())
+                self.docstring.add_raise(reduction(name.strip()), reduction(desc.strip()))
             else:
-                self.docstring.add_raise(line.strip())
+                self.docstring.add_raise(reduction(line.strip()))
 
     def parse_example(self):
         """
