@@ -169,7 +169,7 @@ class GoogleDocstringParser(Parser):
         最开始未解析到的内容全部加入desc
 
         Returns:
-
+            Docstring
         """
         add_desc = True
         while self.lineno < len(self.lines):
