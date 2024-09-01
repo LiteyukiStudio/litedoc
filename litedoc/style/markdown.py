@@ -14,8 +14,6 @@ from litedoc.syntax.node import *
 from litedoc.i18n import litedoc_hide
 
 
-
-
 def generate(parser: AstParser, lang: str, frontmatter: Optional[dict] = None, **kwargs) -> str:
     """
     Generate markdown style document from ast
@@ -28,9 +26,11 @@ def generate(parser: AstParser, lang: str, frontmatter: Optional[dict] = None, *
     Returns:
         markdown style document
     """
-    if frontmatter is not None:
+    code_frontmatter = parser.description.front_matter if parser.description is not None and parser.description.front_matter else {}
+    code_frontmatter.update(frontmatter or {})
+    if code_frontmatter:
         md = "---\n"
-        for k, v in frontmatter.items():
+        for k, v in code_frontmatter.items():
             md += f"{k}: {v}\n"
         md += "---\n"
     else:

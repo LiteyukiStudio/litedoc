@@ -55,6 +55,8 @@ class Docstring(BaseModel):
     raise_: list[Exception_] = []
     example: Optional[str] = None
 
+    front_matter: Optional[dict[str, str]] = None
+
     is_module: bool = False
 
     def add_desc(self, desc: str):
@@ -80,6 +82,11 @@ class Docstring(BaseModel):
             self.example = desc
         else:
             self.example += "\n" + desc
+
+    def add_front_matter(self, key: str, value: str):
+        if self.front_matter is None:
+            self.front_matter = {}
+        self.front_matter[key] = value
 
     def reduction(self, style: str = "google") -> str:
         """

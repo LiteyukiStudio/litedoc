@@ -76,7 +76,6 @@ class GoogleDocstringParser(Parser):
 
         self.is_module = kwargs.get("is_module", False)
         """是否为模块的docstring，是则不在说明处添加说明字样"""
-
         self.docstring = Docstring(raw=docstring, **kwargs)
 
     def read_line(self, move: bool = True) -> str:
@@ -167,7 +166,7 @@ class GoogleDocstringParser(Parser):
 
     def parse(self) -> Docstring:
         """
-        逐行解析，直到遇到EOS
+        逐行解析，直到遇到token，解析token对应的内容，
 
         最开始未解析到的内容全部加入desc
 
@@ -175,11 +174,20 @@ class GoogleDocstringParser(Parser):
             Docstring
         """
         add_desc = True
+        add_front_matter = False
         while self.lineno < len(self.lines):
             token = self.match_token()
-            if token is None and add_desc:
-                self.docstring.add_desc(reduction(self.lines[self.lineno].strip()))
 
+            if token is None and add_desc:
+                if self.is_module and self.lines[self.lineno].strip() == "---":
+                    add_front_matter = not add_front_matter
+                    self.lineno += 1
+                    continue
+                if add_front_matter and ":" in self.lines[self.lineno]:
+                    key, value = map(str.strip, self.lines[self.lineno].split(":", 1))
+                    self.docstring.add_front_matter(key, value)
+                else:
+                    self.docstring.add_desc(reduction(self.lines[self.lineno].strip()))
             if token is not None:
                 add_desc = False
 
