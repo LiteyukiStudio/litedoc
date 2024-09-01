@@ -33,7 +33,7 @@ class AstParser:
 
         self.file_path = file_path
 
-        self.description = parse(ast.get_docstring(self.tree), parser=self.style) if ast.get_docstring(self.tree) else None
+        self.description = parse(ast.get_docstring(self.tree), parser=self.style, is_module=True) if ast.get_docstring(self.tree) else None
         """模块描述, 通常位于文件开头的多行注释"""
         self.classes: list[ClassNode] = []
         self.functions: list[FunctionNode] = []

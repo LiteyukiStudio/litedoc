@@ -55,6 +55,8 @@ class Docstring(BaseModel):
     raise_: list[Exception_] = []
     example: Optional[str] = None
 
+    is_module: bool = False
+
     def add_desc(self, desc: str):
         if self.desc == "":
             self.desc = desc
@@ -118,9 +120,7 @@ class Docstring(BaseModel):
         Args:
             lang:
             indent:
-
         Returns:
-
         """
         PREFIX = "" * indent
         ret = ""
@@ -129,7 +129,10 @@ class Docstring(BaseModel):
         # print(self.desc, self.return_)
         # 单数属性
         if self.desc:
-            ret += PREFIX + f"\n**{get_text(lang, 'desc')}**: {self.desc}\n"
+            if not self.is_module:
+                ret += PREFIX + f"\n**{get_text(lang, 'desc')}**: {self.desc}\n"
+            else:
+                ret += PREFIX + f"\n{self.desc}\n"
 
         # 复数属性
         if self.args:

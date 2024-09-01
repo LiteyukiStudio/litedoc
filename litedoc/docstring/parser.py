@@ -68,13 +68,16 @@ class GoogleDocstringParser(Parser):
             "前言"       : "front_matter",
     }
 
-    def __init__(self, docstring: str, indent: int = 4):
+    def __init__(self, docstring: str, indent: int = 4, **kwargs):
         self.lines = pre_handle(docstring).splitlines()
         self.indent = indent
         self.lineno = 0  # Current line number
         self.char = 0  # Current character position
 
-        self.docstring = Docstring(raw=docstring)
+        self.is_module = kwargs.get("is_module", False)
+        """是否为模块的docstring，是则不在说明处添加说明字样"""
+
+        self.docstring = Docstring(raw=docstring, **kwargs)
 
     def read_line(self, move: bool = True) -> str:
         """
@@ -205,8 +208,8 @@ class ReStructuredParser(Parser):
     ...
 
 
-def parse(docstring: str, parser: str = "google", indent: int = 4) -> Docstring:
+def parse(docstring: str, parser: str = "google", indent: int = 4, **kwargs) -> Docstring:
     if parser == "google":
-        return GoogleDocstringParser(docstring, indent).parse()
+        return GoogleDocstringParser(docstring, indent, **kwargs).parse()
     else:
         raise ValueError(f"Unknown parser: {parser}")
