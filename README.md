@@ -5,6 +5,7 @@
 功能：
 
 - i18n多语言支持
+- frontmatter支持
 - 可选注释风格
 - 可选主题支持
 - 支持对象带有相对链接跳转
@@ -53,6 +54,7 @@ litedoc <your_module_path> -o|--output <output_path>
 - 生成器默认不处理"私有"变量和函数，即以`_`开头的变量和函数（尽管Python没有真正的私有变量），也默认不处理没有注释的变量
 - 如果你不想展示某个函数和变量，可以在函数文档字串任意处加上`@litedoc-hide`
 - 变量注释支持在同一行内使用`#`添加的注释，也支持在下一行使用`"""注释内容"""`添加的注释
+- 可在文件顶部的注释顶部添加frontmatter，如`---\ntitle: liteyuki\n---`，会被自动追加更新到传入的frontmatter中
 
 ## 自动化构建(Github workflows)
 
