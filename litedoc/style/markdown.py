@@ -27,10 +27,11 @@ def generate(parser: AstParser, lang: str, frontmatter: Optional[dict] = None, *
         markdown style document
     """
     code_frontmatter = parser.description.front_matter if parser.description is not None and parser.description.front_matter else {}
-    code_frontmatter.update(frontmatter or {})
-    if code_frontmatter:
+    frontmatter = frontmatter or {}
+    frontmatter.update(code_frontmatter)
+    if frontmatter:
         md = "---\n"
-        for k, v in code_frontmatter.items():
+        for k, v in frontmatter.items():
             md += f"{k}: {v}\n"
         md += "---\n"
     else:
