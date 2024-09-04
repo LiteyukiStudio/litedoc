@@ -39,7 +39,7 @@ def generate(parser: AstParser, lang: str, frontmatter: Optional[dict] = None, *
 
     # 添加标题，如果有
     if parser.title is not None:
-        md += f"# {parser.title}\n\n"
+        md += f"# **{get_text(lang, 'module')}** `{parser.title}`\n\n"
 
     # 添加描述，如果有
     if parser.description is not None:

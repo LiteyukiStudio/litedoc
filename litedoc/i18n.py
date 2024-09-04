@@ -9,7 +9,7 @@ NestedDict: TypeAlias = dict[str, 'str | NestedDict']
 """@litedoc-hide"""
 i18n_dict: dict[str, NestedDict] = {  # @litedoc-hide
         "en"     : {
-                "docstring": {
+                "docstring"     : {
                         "args"     : "Arguments",
                         "return"   : "Return",
                         "attribute": "Attribute",
@@ -17,15 +17,16 @@ i18n_dict: dict[str, NestedDict] = {  # @litedoc-hide
                         "example"  : "Examples",
                         "yields"   : "Yields",
                 },
-                "src"      : "Source code",
-                "desc"     : "Description",
-                "type"     : "Type",
-                "or"       : "or",
+                "module"        : "Module",
+                "src"           : "Source code",
+                "desc"          : "Description",
+                "type"          : "Type",
+                "or"            : "or",
                 "view_on_github": "View on GitHub",
-                "default_value": "Default",
+                "default_value" : "Default",
         },
         "zh-Hans": {
-                "docstring": {
+                "docstring"     : {
                         "args"     : "参数",
                         "return"   : "返回",
                         "attribute": "属性",
@@ -33,15 +34,16 @@ i18n_dict: dict[str, NestedDict] = {  # @litedoc-hide
                         "example"  : "示例",
                         "yields"   : "产出",
                 },
-                "src"      : "源代码",
-                "desc"     : "说明",
-                "type"     : "类型",
-                "or"       : "或",
+                "module"        : "模块",
+                "src"           : "源代码",
+                "desc"          : "说明",
+                "type"          : "类型",
+                "or"            : "或",
                 "view_on_github": "在GitHub上查看",
-                "default_value": "默认值",
+                "default_value" : "默认值",
         },
         "zh-Hant": {
-                "docstring": {
+                "docstring"     : {
                         "args"     : "變數説明",
                         "return"   : "返回",
                         "attribute": "屬性",
@@ -49,15 +51,16 @@ i18n_dict: dict[str, NestedDict] = {  # @litedoc-hide
                         "example"  : "範例",
                         "yields"   : "產出",
                 },
-                "src"      : "源碼",
-                "desc"     : "説明",
-                "type"     : "類型",
-                "or"       : "或",
+                "module"        : "模組",
+                "src"           : "源碼",
+                "desc"          : "説明",
+                "type"          : "類型",
+                "or"            : "或",
                 "view_on_github": "於GitHub上查看",
-                "default_value": "默認值",
+                "default_value" : "默認值",
         },
         "ja"     : {
-                "docstring": {
+                "docstring"     : {
                         "args"     : "引数",
                         "return"   : "戻り値",
                         "attribute": "属性",
@@ -65,12 +68,13 @@ i18n_dict: dict[str, NestedDict] = {  # @litedoc-hide
                         "example"  : "例",
                         "yields"   : "生成",
                 },
-                "src"      : "ソースコード",
-                "desc"     : "説明",
-                "type"     : "タイプ",
-                "or"       : "または",
+                "module"        : "モジュール",
+                "src"           : "ソースコード",
+                "desc"          : "説明",
+                "type"          : "タイプ",
+                "or"            : "または",
                 "view_on_github": "GitHubで表示",
-                "default_value": "デフォルト",
+                "default_value" : "デフォルト",
         },
 }  # @litedoc-hide
 
@@ -123,5 +127,6 @@ def get_text(lang: str, key: str, default: Optional[str] = None, fallback: Optio
         return i18n_flat_dict.get(fallback, {}).get(key, default or key)
     else:
         return default or key
+
 
 litedoc_hide = "@litedoc-hide"
