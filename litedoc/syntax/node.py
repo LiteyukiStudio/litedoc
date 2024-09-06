@@ -239,7 +239,7 @@ class FunctionNode(BaseModel):
         h = "#" * h_level
         """标题等级"""
 
-        md = ""
+        md = "---\n"
         # 装饰器部分
         # 特殊装饰器
         special_decorators = {
