@@ -137,9 +137,9 @@ class Docstring(BaseModel):
         # 单数属性
         if self.desc:
             if not self.is_module:
-                ret += PREFIX + f"\n**{get_text(lang, 'desc')}**: {self.desc}\n"
+                ret += PREFIX + f"**{get_text(lang, 'desc')}**: {self.desc}\n"
             else:
-                ret += PREFIX + f"\n{self.desc}\n"
+                ret += PREFIX + f"{self.desc}\n"
 
         # 复数属性
         if self.args:

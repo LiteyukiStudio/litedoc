@@ -291,7 +291,7 @@ class FunctionNode(BaseModel):
 
         """此处预留docstring"""
         if self.docs is not None:
-            md += f"\n{self.docs.markdown(lang, indent)}\n"
+            md += f"{self.docs.markdown(lang, indent)}\n"
         else:
             pass
         # 源码展示
@@ -303,7 +303,6 @@ class FunctionNode(BaseModel):
             a_tag = f"<a href='{origin_url}' target='_blank'>{get_text(lang, 'view_on_github')}</a>"
             or_and_a = f" {get_text(lang, 'or')} {a_tag}"
         else:
-            a_tag = ""
             or_and_a = ""
         md += PREFIX + f"\n<details>\n<summary> <b>{get_text(lang, 'src')}</b>{or_and_a}</summary>\n\n```python\n{self.src}\n```\n</details>\n\n"
 
