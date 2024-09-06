@@ -164,6 +164,13 @@ class FunctionNode(BaseModel):
             "__truediv__" : "/",
             "__rtruediv__": "/",
             "__neg__"     : "-",
+            "__and__"     : "&",
+            "__or__"      : "|",
+            "__xor__"     : "^",
+            "__lshift__"  : "<<",
+            "__rshift__"  : ">>",
+            "__getitem__" : "[]",
+            "__setitem__" : "[] =",
     }  # 魔术方法, 例如运算符
 
     def is_private(self):
