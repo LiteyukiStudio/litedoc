@@ -14,6 +14,7 @@ from pydantic import BaseModel
 
 from litedoc.docstring.docstring import Docstring
 from litedoc.i18n import get_text, litedoc_hide
+from litedoc.utils import remove_docstrings_from_code
 
 
 class TypeHint:
@@ -146,7 +147,7 @@ class FunctionNode(BaseModel):
 
     return_: str = TypeHint.NO_RETURN
     decorators: list[str] = []
-    src: str
+    src: str    # 源码
     is_async: bool = False
     is_classmethod: bool = False
 
@@ -294,7 +295,8 @@ class FunctionNode(BaseModel):
             md += f"{self.docs.markdown(lang, indent)}\n"
         else:
             pass
-        # 源码展示
+
+        """源码github链接"""
         if kwargs.get("bu", None):
             # 源码链接
             self.module_file_path = self.module_file_path.replace("\\", "/")
@@ -304,7 +306,9 @@ class FunctionNode(BaseModel):
             or_and_a = f" {get_text(lang, 'or')} {a_tag}"
         else:
             or_and_a = ""
-        md += PREFIX + f"\n<details>\n<summary> <b>{get_text(lang, 'src')}</b>{or_and_a}</summary>\n\n```python\n{self.src}\n```\n</details>\n\n"
+
+        """源码展示"""
+        md += PREFIX + f"\n<details>\n<summary> <b>{get_text(lang, 'src')}</b>{or_and_a}</summary>\n\n```python\n{self.get_src_without_docstring()}\n```\n</details>\n\n"
 
         return md
 
@@ -316,6 +320,14 @@ class FunctionNode(BaseModel):
         """
         num = len(self.args) + len(self.posonlyargs) - len(self.defaults)
         self.defaults = [ConstantNode(value=TypeHint.NO_DEFAULT) for _ in range(num)] + self.defaults
+
+    def get_src_without_docstring(self):
+        """
+        获取去掉docstring的源码
+        Returns:
+            str
+        """
+        return remove_docstrings_from_code(self.src)
 
     def __str__(self):
         return f"def {self.name}({', '.join([f'{arg.name}: {arg.type} = {arg.default}' for arg in self.args])}) -> {self.return_}"
