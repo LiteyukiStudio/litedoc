@@ -132,7 +132,6 @@ def generate_from_module(
             config_front_matter = {
                 "title": title,
             }
-            print(pyfile_path, os.path.basename(pyfile_path))
 
             if frontmatter is not None:
                 # 对占位符进行替换
