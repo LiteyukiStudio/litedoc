@@ -50,16 +50,17 @@ def get_relative_path(base_path: str, target_path: str) -> str:
     return os.path.relpath(target_path, base_path)
 
 
-def generate_from_module(module_folder: str,
-                         output_dir: str,
-                         with_top: bool = False,
-                         lang: str = "zh-Hans",
-                         ignored_paths=None,
-                         theme: str = "vitepress",
-                         style: str = "google",
-                         frontmatter: Optional[dict] = None,
-                         **kwargs
-                         ):
+def generate_from_module(
+    module_folder: str,
+    output_dir: str,
+    with_top: bool = False,
+    lang: str = "zh-Hans",
+    ignored_paths=None,
+    theme: str = "vitepress",
+    style: str = "google",
+    frontmatter: Optional[dict] = None,
+    **kwargs,
+):
     """
     生成文档
     Args:
@@ -83,17 +84,22 @@ def generate_from_module(module_folder: str,
         os.makedirs(output_dir)
 
     replace_data = {
-            "__init__": "index" if theme == "vitepress" else "README",
-            ".py"     : ".md",
+        "__init__": "index" if theme == "vitepress" else "README",
+        ".py": ".md",
     }
 
     total_file_count = len(file_list)
     generate_file_count = 0
     for pyfile_path in file_list:
         try:
-            if any(ignored_path.replace("\\", "/") in pyfile_path.replace("\\", "/") for ignored_path in ignored_paths):
+            if any(
+                ignored_path.replace("\\", "/") in pyfile_path.replace("\\", "/")
+                for ignored_path in ignored_paths
+            ):
                 continue
-            no_module_name_pyfile_path = get_relative_path(module_folder, pyfile_path)  # 去头路径
+            no_module_name_pyfile_path = get_relative_path(
+                module_folder, pyfile_path
+            )  # 去头路径
             # markdown相对路径
             rel_md_path = pyfile_path if with_top else no_module_name_pyfile_path
             for rk, rv in replace_data.items():
@@ -101,26 +107,53 @@ def generate_from_module(module_folder: str,
             base_name = os.path.basename(rel_md_path)  # index.md
             abs_md_path = os.path.join(output_dir, rel_md_path)  # 最终输出路径
 
-            create_same_path = os.path.join(os.path.dirname(abs_md_path), os.path.basename(os.path.dirname(abs_md_path))) + ".md"
+            create_same_path = (
+                os.path.join(
+                    os.path.dirname(abs_md_path),
+                    os.path.basename(os.path.dirname(abs_md_path)),
+                )
+                + ".md"
+            )
 
-            title = (pyfile_path.replace("\\", "/")
-                     .replace("/", ".")
-                     .replace(".py", "")
-                     .replace(".__init__", ""))
+            title = (
+                pyfile_path.replace("\\", "/")
+                .replace("/", ".")
+                .replace(".py", "")
+                .replace(".__init__", "")
+            )
             # 获取模块信息
-            ast_parser = AstParser(open(pyfile_path, "r", encoding="utf-8").read(), title=title, style=style, file_path=no_module_name_pyfile_path)
+            ast_parser = AstParser(
+                open(pyfile_path, "r", encoding="utf-8").read(),
+                title=title,
+                style=style,
+                file_path=no_module_name_pyfile_path,
+            )
             # 生成markdown
             config_front_matter = {
-                    "title": title,
+                "title": title,
             }
+            print(pyfile_path, os.path.basename(pyfile_path))
 
             if frontmatter is not None:
-                config_front_matter.update(frontmatter)
+                # 对占位符进行替换
+                for k, v in frontmatter.items():
+                    if r"%filename%" in v:
+                        v = v.replace(r"%filename%", os.path.basename(pyfile_path))
+                    if r"%filepath%" in v:
+                        v = v.replace(r"%filepath%", pyfile_path)
+                    if r"%filetitle%" in v:
+                        v = v.replace(
+                            r"%filetitle%",
+                            os.path.basename(abs_md_path).replace(".md", ""),
+                        )
+                    config_front_matter[k] = v
 
             if base_name == "index.md":
                 config_front_matter["collapsed"] = "true"
 
-            md_content = generate(ast_parser, lang=lang, frontmatter=config_front_matter, **kwargs)
+            md_content = generate(
+                ast_parser, lang=lang, frontmatter=config_front_matter, **kwargs
+            )
             file_data[abs_md_path] = md_content
             if kwargs.get("cs", False) and base_name == "index.md":
                 file_data[create_same_path] = md_content
@@ -132,4 +165,6 @@ def generate_from_module(module_folder: str,
 
     for fn, content in file_data.items():
         write_to_file(content, fn)
-    print(f"\nComplete:    {generate_file_count}/{total_file_count} success    {total_file_count - generate_file_count} failed\n")
+    print(
+        f"\nComplete:    {generate_file_count}/{total_file_count} success    {total_file_count - generate_file_count} failed\n"
+    )

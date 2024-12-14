@@ -38,7 +38,7 @@ def main():
     parser.add_argument("-cd", "--class-define", default="class", type=str, help="Class define of the document.")
     parser.add_argument("-vd", "--var-define", default="var", type=str, help="Variable define of the document.")
     parser.add_argument("-ad", "--attr-define", default="attr", type=str, help="Attribute define of the document.")
-    # frontmatter 输入格式为 key1=value1,key2=value2, 空格用%20代替
+    # frontmatter 输入格式为 key1=value1,key2=value2, 空格用%20代替, %filename%,%filepath%,%filetitle%将分别替换为filename和点分隔文件路径及无扩展名markdown文件名
 
     args = parser.parse_args()
 
